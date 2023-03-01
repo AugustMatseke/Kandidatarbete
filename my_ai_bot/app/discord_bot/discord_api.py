@@ -18,7 +18,16 @@ class MyClient(discord.Client):
     i = 0
     BOT_CHANNEL_ID = 1075004933134356480
     async def on_ready(self):
-        print("Successfully logged in as: ", self.user)
+        # print("Registering commands...")
+        # await tree.sync(guild=discord.Object(id=1064844577820921886))
+        print("Initializing database...")
+        db.init_database()
+        print("Loading events...")
+        commands.events = set(event[0] for event in db.getevents())
+        print(commands.events)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
+        print(f"We have logged in as {client.user}")
+        print("Ready.")
 
     async def on_message(self, message):
         print(message.content)
@@ -26,21 +35,10 @@ class MyClient(discord.Client):
             return
         if message.channel.id != MyClient.BOT_CHANNEL_ID:
             return
-        command, user_message = None, None
         
         #print("Waiting for message")
         await fetchMessages(message)
         #print("Message fetched")
-
-        for  text in ['/join', '/Join']:
-            if message.content.startswith(text):
-                command=message.content.split(' ')[0]
-                user_message=message.content.replace(text, '')
-                print(command,user_message)
-
-            if command == '/join' or command == '/Join':
-                ##TODO joina ett event
-                print("Work in progress")
 
     
 async def fetchMessages(message):
@@ -64,16 +62,3 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = MyClient(intents=intents)
-
-@client.event
-async def on_ready():
-    # print("Registering commands...")
-    # await tree.sync(guild=discord.Object(id=1064844577820921886))
-    print("Initializing database...")
-    db.init_database()
-    print("Loading events...")
-    commands.events = set(event[0] for event in db.getevents())
-    print(commands.events)
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
-    print(f"We have logged in as {client.user}")
-    print("Ready.")
