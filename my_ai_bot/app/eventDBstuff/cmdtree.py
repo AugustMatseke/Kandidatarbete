@@ -1,16 +1,10 @@
-import json
-
 import discord
 from discord import app_commands
+from app.discord_bot.discord_api import client
 
 import commands
 import db
 
-config = json.load(open("config.json"))
-
-intents = discord.Intents.default()
-intents.message_content = True
-client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
 @client.event
@@ -56,18 +50,3 @@ async def leaveevent(interaction: discord.Interaction, name: str):
 @tree.command(name="getevents", description="Get all events", guild=discord.Object(id=1064844577820921886), )
 async def getevents(interaction: discord.Interaction):
     await interaction.response.send_message(str(commands.getevents()))
-
-@client.event
-async def on_ready():
-    # print("Registering commands...")
-    # await tree.sync(guild=discord.Object(id=1064844577820921886))
-    print("Initializing database...")
-    db.init_database()
-    print("Loading events...")
-    commands.events = set(event[0] for event in db.getevents())
-    print(commands.events)
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
-    print(f"We have logged in as {client.user}")
-    print("Ready.")
-
-client.run(config["bot_token"])

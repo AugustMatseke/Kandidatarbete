@@ -4,6 +4,9 @@ import os
 import asyncio
 from app.chatgpt_ai.openai import chatgpt_response
 
+import app.eventDBstuff.db as db
+import app.eventDBstuff.commands as commands
+
 load_dotenv()
 
 discord_token = os.getenv('DISCORD_TOKEN')
@@ -61,3 +64,16 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = MyClient(intents=intents)
+
+@client.event
+async def on_ready():
+    # print("Registering commands...")
+    # await tree.sync(guild=discord.Object(id=1064844577820921886))
+    print("Initializing database...")
+    db.init_database()
+    print("Loading events...")
+    commands.events = set(event[0] for event in db.getevents())
+    print(commands.events)
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
+    print(f"We have logged in as {client.user}")
+    print("Ready.")
