@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import discord
+from discord import app_commands
 import os
 import asyncio
 from app.chatgpt_ai.openai import chatgpt_response
@@ -13,14 +14,15 @@ discord_token = os.getenv('DISCORD_TOKEN')
 
 
 
+
 class MyClient(discord.Client):
     conversation = ""
     participants = []
     i = 0
     BOT_CHANNEL_ID = 1075004933134356480
     async def on_ready(self):
-        # print("Registering commands...")
-        # await tree.sync(guild=discord.Object(id=1064844577820921886))
+        print("Registering commands...")
+        await tree.sync(guild=discord.Object(id=1064844577820921886))
         print("Initializing database...")
         db.init_database()
         print("Loading events...")
@@ -102,4 +104,46 @@ def eventHandler(bot_response):
         print(user_id, event, time, location)
         commands.addevent(user_id, event, time, location)
         commands.events.add(event)
+
+
+tree = app_commands.CommandTree(client)
+
+@tree.command(name="addevent", description="Add an event", guild=discord.Object(id=1064844577820921886), )
+async def addevent(interaction: discord.Interaction, name: str, time: str, location: str):
+    if commands.addevent(interaction.user.id, name, time, location):
+        await interaction.response.send_message("Event added.")
+    else:
+        await interaction.response.send_message("Event already exists.")
+
+@tree.command(name="removeevent", description="Delete an event", guild=discord.Object(id=1064844577820921886), )
+async def removeevent(interaction: discord.Interaction, name: str):
+    if commands.removeevent(interaction.user.id, name):
+        await interaction.response.send_message("Event removed.")
+    else:
+        await interaction.response.send_message("Event does not exist. (Or you do not own it.)")
+
+@tree.command(name="modifyevent", description="Modify an event", guild=discord.Object(id=1064844577820921886), )
+async def modifyevent(interaction: discord.Interaction, name: str, time: str, location: str):
+    if commands.modifyevent(interaction.user.id, name, time, location):
+        await interaction.response.send_message("Event modified.")
+    else:
+        await interaction.response.send_message("Event does not exist. (Or you do not own it.)")
+
+@tree.command(name="joinevent", description="Join an event", guild=discord.Object(id=1064844577820921886), )
+async def joinevent(interaction: discord.Interaction, name: str):
+    if commands.joinevent(interaction.user.id, name):
+        await interaction.response.send_message("Joined event.")
+    else:
+        await interaction.response.send_message("Event does not exist. (Or you are already in it.)")
+
+@tree.command(name="leaveevent", description="Leave an event", guild=discord.Object(id=1064844577820921886), )
+async def leaveevent(interaction: discord.Interaction, name: str):
+    if commands.leaveevent(interaction.user.id, name):
+        await interaction.response.send_message("Left event.")
+    else:
+        await interaction.response.send_message("Event does not exist. (Or you are not in it.)")
+
+@tree.command(name="getevents", description="Get all events", guild=discord.Object(id=1064844577820921886), )
+async def getevents(interaction: discord.Interaction):
+    await interaction.response.send_message(str(commands.getevents()))
 
