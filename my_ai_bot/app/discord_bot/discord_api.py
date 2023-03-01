@@ -45,7 +45,7 @@ async def fetchMessages(message):
     MyClient.conversation+= (message.author.name + ": " + message.content + ". ")
     MyClient.i += 1
     if MyClient.i == 8:
-        bot_response = chatgpt_response(prompt = "Find the event, location, time, date and participants in the following conversation: " + MyClient.conversation)
+        bot_response = chatgpt_response(prompt = "Find the event, location, time, date and participants in the following conversation, and if only one thing can be found, return N/A: " + MyClient.conversation)
         await message.channel.send(f"Answer: {bot_response}")
         MyClient.i = 0
         #print(MyClient.conversation)
