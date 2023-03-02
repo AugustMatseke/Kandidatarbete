@@ -19,7 +19,7 @@ def addevent(name, time, location, owner, participants):
     if result:
         return False
     cur.execute("INSERT INTO events (name, time, location, owner, participants) VALUES (?, ?, ?, ?, ?)",
-                (name, time, location, owner, owner))
+                (name, time, location, owner, participants))
     con.commit()
     return True
 
