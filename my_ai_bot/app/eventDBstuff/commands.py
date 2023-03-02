@@ -39,3 +39,9 @@ def leaveevent(user_id, name: str):
 
 def getevents():
     return events
+
+def getevent(name: str):
+    if name not in events:
+        return None
+    name, time, date, owner, participants = db.getevent(name)
+    return name, time, date, owner, participants.split(", ")

@@ -13,16 +13,14 @@ load_dotenv()
 discord_token = os.getenv('DISCORD_TOKEN')
 
 
-
-
 class MyClient(discord.Client):
     conversation = ""
     participants = []
     i = 0
     BOT_CHANNEL_ID = 1075004933134356480
     async def on_ready(self):
-        print("Registering commands...")
-        await tree.sync(guild=discord.Object(id=1064844577820921886))
+        # print("Registering commands...")
+        # await tree.sync(guild=discord.Object(id=1064844577820921886))
         print("Initializing database...")
         db.init_database()
         print("Loading events...")
@@ -70,11 +68,8 @@ intents.message_content = True
 client = MyClient(intents=intents)
 
 # get nickname from discord id
-def get_nickname(discord_id):
-    for member in client.get_all_members():
-        if member.id == discord_id:
-            return member.nick
-    return None
+async def get_nickname(discord_id):
+    return await client.fetch_user(int(discord_id))
 
 # get discord id from nickname
 def get_discord_id(nickname):
@@ -145,5 +140,19 @@ async def leaveevent(interaction: discord.Interaction, name: str):
 
 @tree.command(name="getevents", description="Get all events", guild=discord.Object(id=1064844577820921886), )
 async def getevents(interaction: discord.Interaction):
-    await interaction.response.send_message(str(commands.getevents()))
+    if len(commands.getevents()) == 0:
+        await interaction.response.send_message("No events.")
+    else:
+        await interaction.response.send_message(", ".join(commands.getevents()))
 
+@tree.command(name="getevent", description="Get an event", guild=discord.Object(id=1064844577820921886), )
+async def getevent(interaction: discord.Interaction, name: str):
+    name, time, location, owner, participants = commands.getevent(name)
+    owner = await get_nickname(owner)
+    participants = [str(await get_nickname(participant)) for participant in participants]
+    embed = discord.Embed(title=name)
+    embed.add_field(name="Time", value=time, inline=True)
+    embed.add_field(name="Location", value=location, inline=False)
+    embed.add_field(name="Owner", value=owner, inline=True)
+    embed.add_field(name="Participants", value=", ".join(participants), inline=False)
+    await interaction.response.send_message(embed=embed)

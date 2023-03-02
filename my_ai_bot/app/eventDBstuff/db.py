@@ -10,7 +10,7 @@ def init_database():
     return True
 
 def addevent(name, time, location, owner):
-    owner = str(owner) + ", "
+    owner = str(owner)
     cur.execute("SELECT * FROM events WHERE name = ?", (name,))
     result = cur.fetchone()
     if result:
@@ -31,7 +31,7 @@ def removeevent(name, user):
 def modifyevent(name, time, location, user):
     cur.execute("SELECT * FROM events WHERE name = ?", (name,))
     owner = cur.fetchone()[3]
-    if user != owner:
+    if str(user) != owner:
         return False
     cur.execute("UPDATE events SET time = ?, location = ? WHERE name = ?", (time, location, name))
     con.commit()
@@ -60,3 +60,7 @@ def leaveevent(name, user):
 def getevents():
     cur.execute("SELECT name FROM events")
     return cur.fetchall()
+
+def getevent(name):
+    cur.execute("SELECT * FROM events WHERE name = ?", (name,))
+    return cur.fetchone()
