@@ -1,6 +1,7 @@
 def hello_world():
     print("Hello World!")
 
+
 def daily_schedule():
     print("Wake up at 7:00 AM")
     print("Brush teeth")
