@@ -20,8 +20,8 @@ class MyClient(discord.Client):
     BOT_CHANNEL_ID = 1075004933134356480
 
     async def on_ready(self):
-        print("Registering commands...")
-        await tree.sync(guild=discord.Object(id=1064844577820921886))
+        # print("Registering commands...")
+        # await tree.sync(guild=discord.Object(id=1064844577820921886))
         print("Initializing database...")
         db.init_database()
         print("Loading events...")
@@ -47,22 +47,15 @@ class MyClient(discord.Client):
 
 
 async def fetchMessages(message):
-    # print("About to insert in list")
-    MyClient.conversation += (message.author.name +
-                              ": " + message.content + ". ")
+    MyClient.conversation += (message.author.name + ": " + message.content + ". ")
     MyClient.i += 1
     if MyClient.i == 2:
         bot_response = chatgpt_response(
             prompt="Find the event, location, time, date and participants in the following conversation, and if only one thing can be found, return N/A: " + MyClient.conversation)
-        eventHandler(bot_response)
+        await eventHandler(bot_response)
         await message.channel.send(f"Answer: {bot_response}")
         MyClient.i = 0
-        # print(MyClient.conversation)
         MyClient.conversation = ""
-    # print(MyClient.conversation)
-
-
-# Returns a conversation of multiple users in the form of a string
 
 
 intents = discord.Intents.default()
@@ -70,42 +63,37 @@ intents.message_content = True
 
 client = MyClient(intents=intents)
 
-# get nickname from discord id
+
+async def get_name(discord_id):
+    return (await client.fetch_user(int(discord_id))).name
 
 
-async def get_nickname(discord_id):
-    return await client.fetch_user(int(discord_id))
-
-# get discord id from nickname
-
-
-def get_discord_id(nickname):
-    for member in client.get_all_members():
-        if member.name == nickname:
-            return member.id
-    return None
-
-
-def eventHandler(bot_response):
-    first_user = MyClient.conversation.splitlines()[0].split(": ")[0]
-
+async def eventHandler(bot_response):
     response = bot_response.splitlines()[2:]
-    print(response)
     event = response[0].split(": ")[1].strip()
     if event == "NA":
         return False
     location = response[1].split(": ")[1].strip()
     time = response[2].split(": ")[1].strip()
     date = response[3].split(": ")[1].strip()
-    participants = response[4].split(": ")[1].strip()
-    if " and " in participants:
-        participants = participants.split(" and ")
+    names = response[4].split(": ")[1].strip()
+    if " and " in names:
+        names = names.split(" and ")
 
     user_id = MyClient.participants[0]
+    ids = list(set(MyClient.participants))
+    print(names)
+
+    participants = []
+    for id in ids:
+        if await get_name(id) in names:
+            participants.append(str(id))
 
     if event not in commands.events:
-        print(user_id, event, time, location)
-        commands.addevent(user_id, event, time, location)
+        print("detected event", [event, user_id,
+              time + date, location, participants])
+
+        commands.addevent(user_id, event, time + ";" + date, location, participants)
         commands.events.add(event)
 
 
@@ -163,8 +151,8 @@ async def getevents(interaction: discord.Interaction):
 @tree.command(name="details", description="Get an event", guild=discord.Object(id=1064844577820921886), )
 async def details(interaction: discord.Interaction, name: str):
     name, time, location, owner, participants = commands.getevent(name)
-    owner = await get_nickname(owner)
-    participants = [str(await get_nickname(participant)) for participant in participants]
+    owner = await get_name(owner)
+    participants = [str(await get_name(participant)) for participant in participants]
     embed = discord.Embed(title=name)
     embed.add_field(name="Time", value=time, inline=True)
     embed.add_field(name="Location", value=location, inline=False)

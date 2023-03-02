@@ -5,16 +5,16 @@ import app.eventDBstuff.db as db
 events = set()
 
 
-def addevent(user_id, name: str, time: str, location: str):
+def addevent(user_id: str, name: str, time: str, location: str, participants: list):
     global events
     if name in events:
         return False
-    db.addevent(name, time, location, str(user_id))
+    db.addevent(name, time, location, str(user_id), participants)
     events.add(name)
     return True
 
 
-def removeevent(user_id, name: str):
+def removeevent(user_id: str, name: str):
     global events
     if name not in events:
         return False
@@ -24,20 +24,20 @@ def removeevent(user_id, name: str):
     return False
 
 
-def modifyevent(user_id, name: str, time: str, location: str):
+def modifyevent(user_id: str, name: str, time: str, location: str):
     if name not in events:
         return False
     db.modifyevent(name, time, location, str(user_id))
     return True
 
 
-def joinevent(user_id, name: str):
+def joinevent(user_id: str, name: str):
     if name not in events:
         return False
     return db.joinevent(name, str(user_id))
 
 
-def leaveevent(user_id, name: str):
+def leaveevent(user_id: str, name: str):
     if name not in events:
         return False
     return db.leaveevent(name, str(user_id))

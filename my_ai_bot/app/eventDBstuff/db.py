@@ -11,8 +11,9 @@ def init_database():
     return True
 
 
-def addevent(name, time, location, owner):
+def addevent(name, time, location, owner, participants):
     owner = str(owner)
+    participants = ", ".join(participants)
     cur.execute("SELECT * FROM events WHERE name = ?", (name,))
     result = cur.fetchone()
     if result:
