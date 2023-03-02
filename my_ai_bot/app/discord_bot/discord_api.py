@@ -20,8 +20,8 @@ class MyClient(discord.Client):
     BOT_CHANNEL_ID = 1075004933134356480
 
     async def on_ready(self):
-        # print("Registering commands...")
-        # await tree.sync(guild=discord.Object(id=1064844577820921886))
+        print("Registering commands...")
+        await tree.sync(guild=discord.Object(id=1064844577820921886))
         print("Initializing database...")
         db.init_database()
         print("Loading events...")
@@ -160,8 +160,8 @@ async def getevents(interaction: discord.Interaction):
         await interaction.response.send_message(", ".join(commands.getevents()))
 
 
-@tree.command(name="getevent", description="Get an event", guild=discord.Object(id=1064844577820921886), )
-async def getevent(interaction: discord.Interaction, name: str):
+@tree.command(name="details", description="Get an event", guild=discord.Object(id=1064844577820921886), )
+async def details(interaction: discord.Interaction, name: str):
     name, time, location, owner, participants = commands.getevent(name)
     owner = await get_nickname(owner)
     participants = [str(await get_nickname(participant)) for participant in participants]
