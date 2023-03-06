@@ -5,8 +5,8 @@ import os
 import asyncio
 from app.chatgpt_ai.openai import chatgpt_response
 
-import app.eventDBstuff.db as db
-import app.eventDBstuff.commands as commands
+import app.db_interface.db as db
+import app.db_interface.commands as commands
 
 load_dotenv()
 

@@ -1,5 +1,5 @@
 import discord
-import app.eventDBstuff.db as db
+import app.db_interface.db as db
 
 # This is a set of the names of all events in the database.
 events = set()
