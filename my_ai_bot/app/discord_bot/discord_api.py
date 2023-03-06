@@ -157,6 +157,6 @@ async def details(interaction: discord.Interaction, name: str):
     embed.add_field(name="Time", value=time, inline=True)
     embed.add_field(name="Location", value=location, inline=False)
     embed.add_field(name="Owner", value=owner, inline=True)
-    embed.add_field(name="Participants", value=", ".join(
+    embed.add_field(name="Participants", value= ", ".join([owner] + participants)(
         participants), inline=False)
     await interaction.response.send_message(embed=embed)
