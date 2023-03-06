@@ -12,6 +12,7 @@ load_dotenv()
 
 discord_token = os.getenv('DISCORD_TOKEN')
 
+CONVERSATION_LENGTH_LIMIT = 10
 
 class MyClient(discord.Client):
     conversation = ""
@@ -49,7 +50,7 @@ class MyClient(discord.Client):
 async def fetchMessages(message):
     MyClient.conversation += (message.author.name + ": " + message.content + ". ")
     MyClient.i += 1
-    if MyClient.i == 2:
+    if MyClient.i == CONVERSATION_LENGTH_LIMIT:
         bot_response = chatgpt_response(
             prompt="Find the event, location, time, date and participants in the following conversation, and if only one thing can be found, return N/A: " + MyClient.conversation)
         await eventHandler(bot_response)
