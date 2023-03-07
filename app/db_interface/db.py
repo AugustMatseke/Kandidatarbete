@@ -77,3 +77,6 @@ def getevents():
 def getevent(name):
     cur.execute("SELECT * FROM events WHERE name = ?", (name,))
     return cur.fetchone()
+
+
+
