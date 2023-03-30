@@ -11,6 +11,8 @@ import app.db_interface.commands as commands
 import app.db_interface.db as db
 from app.chatgpt_ai.openai import chatgpt_response
 
+import requests
+
 load_dotenv()
 
 discord_token = os.getenv('DISCORD_TOKEN')
@@ -31,6 +33,7 @@ class MyClient(discord.Client):
         commands.events = set(event[0] for event in db.getevents())
         print(commands.events)
         await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
+        await client.user.edit(avatar=requests.get("https://cdn.discordapp.com/attachments/453281012382695444/1090981562222399578/avatar.png").content)
         print(f"We have logged in as {client.user}")
         print("Ready.")
 
