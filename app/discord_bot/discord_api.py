@@ -1,23 +1,25 @@
-from dotenv import load_dotenv
+import datetime
+import os
+from queue import Queue
+from sys import stderr
+
 import discord
 from discord import app_commands
-import os
-import asyncio
-from app.chatgpt_ai.openai import chatgpt_response
+from dotenv import load_dotenv
 
-import app.db_interface.db as db
 import app.db_interface.commands as commands
+import app.db_interface.db as db
+from app.chatgpt_ai.openai import chatgpt_response
 
 load_dotenv()
 
 discord_token = os.getenv('DISCORD_TOKEN')
 
-CONVERSATION_LENGTH_LIMIT = 10
+CONVERSATION_LENGTH_LIMIT = 15
 
 class MyClient(discord.Client):
-    conversation = ""
+    conversation = Queue()
     participants = []
-    i = 0
     BOT_CHANNEL_ID = 1075004933134356480
 
     async def on_ready(self):
@@ -33,7 +35,7 @@ class MyClient(discord.Client):
         print("Ready.")
 
     async def on_message(self, message: discord.Message):
-        print(message.content)
+        # print(message.content)
         if message.author == self.user:
             return
         if message.channel.id != MyClient.BOT_CHANNEL_ID:
@@ -48,15 +50,15 @@ class MyClient(discord.Client):
 
 
 async def fetchMessages(message):
-    MyClient.conversation += (message.author.name + ": " + message.content + ". ")
-    MyClient.i += 1
-    if MyClient.i == CONVERSATION_LENGTH_LIMIT:
-        bot_response = chatgpt_response(
-            prompt="Find the event, location, time, date and participants in the following conversation, and if only one thing can be found, return N/A: " + MyClient.conversation)
-        await eventHandler(bot_response)
-        await message.channel.send(f"Answer: {bot_response}")
-        MyClient.i = 0
-        MyClient.conversation = ""
+    MyClient.conversation.put(message.author.name + ": " + message.content + ". ")
+    while MyClient.conversation.qsize() > CONVERSATION_LENGTH_LIMIT:
+        MyClient.conversation.get()
+    text = "\n".join(MyClient.conversation.queue)
+    # print(text)
+    bot_response = chatgpt_response(
+        prompt=f"Find the events, their names, locations, times, dates and participants in the following conversation. For each detected event, return a list with the name, location, time and date, and participants. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Return one set of these values for each event found, with a semicolon at the end of each value. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}: " + text)
+    await eventHandler(bot_response)
+    await message.channel.send(bot_response)
 
 
 intents = discord.Intents.default()
@@ -70,32 +72,37 @@ async def get_name(discord_id):
 
 
 async def eventHandler(bot_response):
-    response = bot_response.splitlines()[2:]
-    event = response[0].split(": ")[1].strip()
-    if event == "NA":
-        return False
-    location = response[1].split(": ")[1].strip()
-    time = response[2].split(": ")[1].strip()
-    date = response[3].split(": ")[1].strip()
-    names = response[4].split(": ")[1].strip()
-    if " and " in names:
-        names = names.split(" and ")
+    responses = bot_response.strip().splitlines()
+    print("asdf", responses, file=stderr)
+    # print(*responses, sep="\n")
+    for response in responses:
+        response = response.split(";")
+        print(response)
+        event = response[0].strip()
+        if event == "NA":
+            return False
+        location = response[1].strip()
+        time = response[2].strip()
+        date = response[3].strip()
+        names = response[4].strip()
+        if " and " in names:
+            names = names.split(" and ")
 
-    user_id = MyClient.participants[0]
-    ids = list(set(MyClient.participants))
-    print(names)
+        user_id = MyClient.participants[0]
+        ids = list(set(MyClient.participants))
+        # print(names)
 
-    participants = []
-    for id in ids:
-        if await get_name(id) in names:
-            participants.append(str(id))
+        participants = []
+        for id in ids:
+            if await get_name(id) in names:
+                participants.append(str(id))
 
-    if event not in commands.events:
-        print("detected event", [event, user_id,
-              time + date, location, participants])
+        if event not in commands.events:
+            print("detected event", [event, user_id,
+                time + ", " + date, location, participants])
 
-        commands.addevent(user_id, event, time + ";" + date, location, participants)
-        commands.events.add(event)
+            commands.addevent(user_id, event, time + ";" + date, location, participants)
+            commands.events.add(event)
 
 
 tree = app_commands.CommandTree(client)
