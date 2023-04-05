@@ -6,7 +6,7 @@ cur = None
 
 def init_database():
     global cur, con
-    con = sqlite3.connect("events.db")
+    con = sqlite3.connect("data.db")
     cur = con.cursor()
     return True
 

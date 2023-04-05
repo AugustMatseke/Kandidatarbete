@@ -15,7 +15,7 @@ import requests
 
 load_dotenv()
 
-discord_token = os.getenv('DISCORD_TOKEN')
+discord_token = os.getenv('DISCORD_TOKENA')
 
 CONVERSATION_LENGTH_LIMIT = 15
 
@@ -33,11 +33,14 @@ class MyClient(discord.Client):
         commands.events = set(event[0] for event in db.getevents())
         print(commands.events)
         await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
-        await client.user.edit(avatar=requests.get("https://cdn.discordapp.com/attachments/453281012382695444/1090981562222399578/avatar.png").content)
         print(f"We have logged in as {client.user}")
         print("Ready.")
 
     async def on_message(self, message: discord.Message):
+        if message.channel.id == message.author.dm_channel.id:
+            if message.content == "auth calendar":
+                await authCalendar(message)
+
         # print(message.content)
         if message.author == self.user:
             return
@@ -51,17 +54,25 @@ class MyClient(discord.Client):
         await fetchMessages(message)
         # print("Message fetched")
 
+async def authCalendar(message):
+    return
+
 
 async def fetchMessages(message):
-    MyClient.conversation.put(message.author.name + ": " + message.content + ". ")
+    if not message.content.startswith("#"):
+        # MyClient.conversation.put(message.author.name + ": " + message.content + ". ")
+        MyClient.conversation.put(message.content)
     while MyClient.conversation.qsize() > CONVERSATION_LENGTH_LIMIT:
         MyClient.conversation.get()
     text = "\n".join(MyClient.conversation.queue)
-    # print(text)
+    print(text)
     bot_response = chatgpt_response(
-        prompt=f"Find the events, their names, locations, times, dates and participants in the following conversation. For each detected event, return a list with the name, location, time and date, and participants. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Return one set of these values for each event found, with a semicolon at the end of each value. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}: " + text)
-    await eventHandler(bot_response)
-    await message.channel.send(bot_response)
+        prompt=f"Find all the events, meetings or other gatherings in the following conversation. Find their names, locations, times, dates and participants. For each detected event, meeting or gathering, return a list with the name, location, time and date, and participants. Do not label the values, just list them with semicolons in between. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}: " + text)
+    result = await eventHandler(bot_response)
+    if len(result):
+        await message.channel.send(result)
+    else:
+        await message.channel.send("(nothing found)")
 
 
 intents = discord.Intents.default()
@@ -77,19 +88,23 @@ async def get_name(discord_id):
 async def eventHandler(bot_response):
     responses = bot_response.strip().splitlines()
     print("asdf", responses, file=stderr)
+    response = list(filter(lambda l: "N/A" in l, responses))
+    if len(response) == 0:
+        return 
     # print(*responses, sep="\n")
+
+    found = []
     for response in responses:
         response = response.split(";")
         print(response)
         event = response[0].strip()
-        if event == "NA":
-            return False
+        if event.startswith("Event"):
+            event = event.split(":")[1].strip()
+        if event == "N/A":
+            continue
         location = response[1].strip()
         time = response[2].strip()
-        date = response[3].strip()
-        names = response[4].strip()
-        if " and " in names:
-            names = names.split(" and ")
+        names = response[3].strip().split(", ")
 
         user_id = MyClient.participants[0]
         ids = list(set(MyClient.participants))
@@ -99,14 +114,20 @@ async def eventHandler(bot_response):
         for id in ids:
             if await get_name(id) in names:
                 participants.append(str(id))
+                names.remove(await get_name(id))
+        participants.extend(names)
 
         if event not in commands.events:
             print("detected event", [event, user_id,
-                time + ", " + date, location, participants])
+                time, location, participants])
+            found.append([event, user_id, time, location, participants])
+            if "N/A" in [event, user_id, time, location, participants]:
+                continue
 
-            commands.addevent(user_id, event, time + ";" + date, location, participants)
+            commands.addevent(user_id, event, time, location, participants)
             commands.events.add(event)
-
+            
+    return found
 
 tree = app_commands.CommandTree(client)
 
