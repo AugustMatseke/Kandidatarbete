@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 import app.db_interface.commands as commands
 import app.db_interface.db as db
 from app.chatgpt_ai.openai import chatgpt_response
+from app.gcal.gcal_api import do_auth
 
 import requests
 
@@ -37,26 +38,20 @@ class MyClient(discord.Client):
         print("Ready.")
 
     async def on_message(self, message: discord.Message):
+        if message.author == self.user or message.author.bot:
+            return
+
+        if message.author.dm_channel is None:
+            await message.author.create_dm()
         if message.channel.id == message.author.dm_channel.id:
             if message.content == "auth calendar":
-                await authCalendar(message)
+                await do_auth(message)
 
-        # print(message.content)
-        if message.author == self.user:
-            return
         if message.channel.id != MyClient.BOT_CHANNEL_ID:
-            return
-        if message.author.bot:
             return
 
         self.participants.append(message.author.id)
-        # print("Waiting for message")
         await fetchMessages(message)
-        # print("Message fetched")
-
-async def authCalendar(message):
-    return
-
 
 async def fetchMessages(message):
     if not message.content.startswith("#"):

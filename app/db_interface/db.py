@@ -8,6 +8,11 @@ def init_database():
     global cur, con
     con = sqlite3.connect("data.db")
     cur = con.cursor()
+
+    cur.execute("CREATE TABLE IF NOT EXISTS events (name, time, location, owner, participants)")
+    cur.execute("CREATE TABLE IF NOT EXISTS calendar (discord_id, token)")
+    con.commit()
+
     return True
 
 
@@ -79,4 +84,15 @@ def getevent(name):
     return cur.fetchone()
 
 
+def get_token(discord_id):
+    cur.execute("SELECT token FROM calendar WHERE discord_id = ?", (discord_id,))
+    result = cur.fetchone()
+    if result:
+        return result[1]
+    return None
+
+
+def set_token(discord_id, token):
+    cur.execute("UPDATE calendar SET token = ? WHERE discord_id = ?", (token, discord_id))
+    con.commit()
 
