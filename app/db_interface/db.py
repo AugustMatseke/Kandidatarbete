@@ -93,6 +93,6 @@ def get_token(discord_id):
 
 
 def set_token(discord_id, token):
-    cur.execute("UPDATE calendar SET token = ? WHERE discord_id = ?", (token, discord_id))
+    cur.execute("INSERT INTO calendar (discord_id, token) VALUES (?, ?)", (discord_id, token))
     con.commit()
 
