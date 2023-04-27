@@ -14,7 +14,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar.readonly',
           'https://www.googleapis.com/auth/calendar.events']
 
 class _RedirectWSGIApp(object):
-    def __init__(self, success_message="Deez nuts"):
+    def __init__(self, success_message="Success! You may now close this window."):
         self.last_request_uri = None
         self._success_message = success_message
 
