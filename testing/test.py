@@ -9,7 +9,8 @@ import datetime
 
 load_dotenv()
 
-openai.api_key = 'dont fucking leak the token again smartass'
+openai.api_key = os.getenv('CHATGPT_API_KEY')
+print(openai.api_key)
 
 # today = datetime.datetime.now().strftime('%H:%M %d/%m/%Y')
 today = "12:00 18/04/2023"
@@ -45,6 +46,8 @@ def eventHandler(bot_response):
             continue
         location = response[1].strip()
         time = response[2].strip()
+        if time == "N/A":
+            continue
         names = response[3].strip().split(", ")
 
         # print(";".join([event, location, time, ",".join(names)]))
@@ -66,6 +69,6 @@ with open('log.txt', 'w') as f:
             else:
                 f.write("\n")
         except:
-            print(traceback.format_exc())
-            print(conversation)
+            # print(traceback.format_exc())
+            # print(conversation)
             f.write("\n")

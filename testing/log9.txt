@@ -1,0 +1,120 @@
+Party;N/A;14:00 19/04/2023;Bob,Dom,Rachel,Gloria
+
+
+
+
+
+
+
+
+
+Sunday Brunch;N/A;Sunday, 12:00;Emma,William,Lisa,Don
+Back to School Shopping;N/A;16:00;18/04/2023
+
+
+
+
+
+Cinema;N/A;18/04/2023 20:00;Joe,Peggy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dinner;N/A;20/04/2023 19:00;Henry,Kelly,Christina,Walter,Joe,Carol
+
+Aki Beach;N/A;10:00 02/06/2023;Henry,Paul,Jack,Dennis,Alex
+
+
+Six Flags;N/A;Saturday, 12:00;Amanda,Melissa,Frank,Catherine,Edward
+
+Dinner;Malcolm's house;18/04/2023 18:00;Roger,Malcolm,Linda,Watson family
+
+Hiking Trip;N/A;12:00 25/04/2023;Larry,Amy,Angela,Alex,Jack
+
+
+
+
+
+
+
+
+
+
+Granite Trail Hike;N/A;12:00 18/04/2023;Jose,Brian,Richard
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Movie Night;Mark's House;8:00 18/04/2023;Chris,Mark,Tom
+
+
+
+Group Chat;N/A;12:00 18/04/2023;Lauren,Shirley,Anna,Eric,Unnamed Person
+
+
+Emma's Party;N/A;Saturday;Emma,Brenda,Jon,George,Peter
+
+
+
+
+
+
+
+
+
+
+
+Movie;N/A;Sunday;Dwight,Jordan,Philip

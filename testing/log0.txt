@@ -1,0 +1,120 @@
+Party;N/A;14:00 19/04/2023;Bob,Dom,Rachel,Gloria
+
+
+
+
+
+
+
+
+
+Sunday Brunch;N/A;Sunday, 12:00;Emma,William,Lisa,Don
+
+
+
+
+
+
+
+
+Talk to the Smiths;N/A;12:00 18/04/2023;Macy and Mason
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cooking Dinner;N/A;20:00 18/04/2023;Joanna,Christina,Aunt Zoey
+
+
+
+
+
+Dinner;N/A;20/04/2023 19:00;Henry,Kelly,Christina,Walter,Joe,Carol
+
+Aki Beach;N/A;10:00 02/06/2023;Henry,Paul,Jack,Dennis,Alex
+
+
+Six Flags;N/A;Saturday, 12:00;Amanda,Melissa,Frank,Catherine,Edward
+
+Dinner;Malcolm's house;18/04/2023 18:00;Roger,Malcolm,Linda,Watson family
+
+
+
+
+
+
+
+
+
+
+
+
+Granite Trail Hike;N/A;12:00 18/04/2023;Jose,Brian,Richard
+
+
+
+
+
+Name;Location: Union Station on First Street;Time: 17:00;Date: 21/04/2023
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Movie Night;Mark's House;8:00 18/04/2023;Chris,Mark,Tom
+
+
+
+
+
+
+Emma's Party;N/A;Saturday;Emma,Brenda,Jon,George,Peter
+
+
+
+
+
+
+
+
+
+
+
+Movie;N/A;Sunday, 12:00;Dwight,Jordan,Philip
