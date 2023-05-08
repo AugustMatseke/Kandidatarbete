@@ -56,7 +56,7 @@ class MyClient(discord.Client):
 async def fetchMessages(message: discord.Message):
     if not message.content.startswith("#"):
         # MyClient.conversation.put(message.author.name + ": " + message.content + ". ")
-        MyClient.conversation.put(message.author.name + ": " + message.content)
+        MyClient.conversation.put(message.author.display_name + ": " + message.content)
     while MyClient.conversation.qsize() > CONVERSATION_LENGTH_LIMIT:
         MyClient.conversation.get()
     text = "\n".join(MyClient.conversation.queue)
