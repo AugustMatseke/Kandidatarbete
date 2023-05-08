@@ -9,14 +9,14 @@ from dotenv import load_dotenv
 
 import app.db_interface.commands as commands
 import app.db_interface.db as db
-from app.chatgpt_ai.openai import chatgpt_response
+from app.chatgpt_ai.openai import *
 from app.gcal.gcal_api import do_auth
 
 import requests
 
 load_dotenv()
 
-discord_token = os.getenv('DISCORD_TOKENA')
+discord_token = os.getenv('DISCORD_TOKEN')
 
 CONVERSATION_LENGTH_LIMIT = 15
 
@@ -53,16 +53,17 @@ class MyClient(discord.Client):
         self.participants.append(message.author.id)
         await fetchMessages(message)
 
-async def fetchMessages(message):
+async def fetchMessages(message: discord.Message):
     if not message.content.startswith("#"):
         # MyClient.conversation.put(message.author.name + ": " + message.content + ". ")
-        MyClient.conversation.put(message.content)
+        MyClient.conversation.put(message.author.name + ": " + message.content)
     while MyClient.conversation.qsize() > CONVERSATION_LENGTH_LIMIT:
         MyClient.conversation.get()
     text = "\n".join(MyClient.conversation.queue)
-    print(text)
-    bot_response = chatgpt_response(
-        prompt=f"Find all the events, meetings or other gatherings in the following conversation. Find their names, locations, times, dates and participants. For each detected event, meeting or gathering, return a list with the name, location, time and date, and participants. Do not label the values, just list them with semicolons in between. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}: " + text)
+    # prompt = f"Find all the events, meetings or other gatherings in the following conversation. Find their names, locations, times, dates and participants. For each detected event, meeting or gathering, return a list with the name, location, time and date, and participants in that specific order. Do not label the values, just list them with semicolons in between. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
+    prompt = f"Observe the following conversation. If an event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
+    print(prompt + text, file=stderr)
+    bot_response = turbo(prompt=prompt + text)
     result = await eventHandler(bot_response)
     if len(result):
         await message.channel.send(result)
