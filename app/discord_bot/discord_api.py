@@ -7,7 +7,7 @@ import discord
 from discord import app_commands
 from dotenv import load_dotenv
 
-import app.db_interface.commands as commands
+import app.discord_bot.commands as commands
 import app.db_interface.db as db
 from app.chatgpt_ai.openai import *
 from app.gcal.gcal_api import do_auth

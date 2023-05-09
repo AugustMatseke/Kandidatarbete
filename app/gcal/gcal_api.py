@@ -22,6 +22,7 @@ class _RedirectWSGIApp(object):
         start_response("200 OK", [("Content-type", "text/plain; charset=utf-8")])
         self.last_request_uri = wsgiref.util.request_uri(environ)
         return [self._success_message.encode("utf-8")]
+    
 class CustomFlow(InstalledAppFlow):
     async def run_local_server(
         self,
@@ -77,11 +78,12 @@ async def do_auth(message: discord.Message):
 
         db.set_token(message.author.id, creds.to_json())
 
-    # for testing
-    service = build('calendar', 'v3', credentials=creds)
-    events_result = service.events().list(calendarId='primary',
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-    events = events_result.get('items', [])
-    await message.channel.send(str(events)[:2000])
+    await message.channel.send("Logged in.")
 
+
+def add_event(event):
+    creds = Credentials.from_authorized_user_info(db.get_token(event['author_id']), SCOPES)
+    service = build('calendar', 'v3', credentials=creds)
+
+    event = service.events().insert(calendarId='primary', body=event).execute()
+    print('Event created: %s' % (event.get('htmlLink')))
