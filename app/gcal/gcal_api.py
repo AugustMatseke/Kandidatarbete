@@ -8,6 +8,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from dateutil.parser import parse
+
 import wsgiref
 
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly',
@@ -81,9 +83,59 @@ async def do_auth(message: discord.Message):
     await message.channel.send("Logged in.")
 
 
-def add_event(event):
-    creds = Credentials.from_authorized_user_info(db.get_token(event['author_id']), SCOPES)
+def add_event(user_id, name, start, end=None, location=""):
+    print("for user", user_id, "found token", db.get_token(user_id))
+    temp = {"token": "ya29.a0AWY7CklmsJ3M_9P7RmjKotvXLrs3miNfTW4CdggtQQWxOVLoFzBq6SQSZ5tKrsDaakhq8UNuYv4Op6aOef2gngF-Idcm2u9sslzmSHoSkFy0AtM22Y4Dhu0RjJiKmHePeve7h-abXmIr0M-pldtFhZ5NHlLoaCgYKAVcSARMSFQG1tDrplQm1NgkUFW7_UB8cIpTZ_w0163", "refresh_token": "1//0c4tVEiaKJwiBCgYIARAAGAwSNwF-L9IrpEE8wAmyDnhgQHAvlDRUNiLgjRfmHNoQA1E9E0myMEu3LwabpkWLa_yg4avbOv3hnHI", "token_uri": "https://oauth2.googleapis.com/token", "client_id": "284670107877-6sici57v74k1ulordvmtaokp9un1rpft.apps.googleusercontent.com", "client_secret": "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", "scopes": ["https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/calendar.events"], "expiry": "2023-05-09T09:09:40.427011Z"}
+    # creds = Credentials.from_authorized_user_info(db.get_token(user_id), SCOPES)
+    creds = Credentials.from_authorized_user_info(temp, SCOPES)
     service = build('calendar', 'v3', credentials=creds)
 
+    event = {
+        'summary': name,
+        'location': location,
+        'start': {
+            'dateTime': parse(start).isoformat(),
+            'timeZone': 'Europe/Stockholm',
+        },
+        'end': {
+            'dateTime': parse(end).isoformat() if end else parse(start).isoformat(),
+            'timeZone': 'Europe/Stockholm',
+        }
+    }
+
     event = service.events().insert(calendarId='primary', body=event).execute()
-    print('Event created: %s' % (event.get('htmlLink')))
+    print(event)
+    return event
+
+def remove_event(event_id, author_id):
+    creds = Credentials.from_authorized_user_info(db.get_token(author_id), SCOPES)
+    service = build('calendar', 'v3', credentials=creds)
+
+    try:
+        service.events().delete(calendarId='primary', eventId=event_id).execute()
+    except HttpError as e:
+        if e.resp.status == 410:
+            return False
+        else:
+            raise e
+    return True
+
+def modify_event(event_id, author_id, name, ):
+    creds = Credentials.from_authorized_user_info(db.get_token(author_id), SCOPES)
+    service = build('calendar', 'v3', credentials=creds)
+
+    event = {
+        'summary': name,
+        'location': location,
+        'start': {
+            'dateTime': start.isoformat(),
+            'timeZone': 'Europe/Stockholm',
+        },
+        'end': {
+            'dateTime': end.isoformat() if end else start.isoformat(),
+            'timeZone': 'Europe/Stockholm',
+        }
+    }
+
+    service.events().update(calendarId='primary', eventId=event_id, body=event).execute()
+    return True

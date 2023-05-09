@@ -16,7 +16,7 @@ import requests
 
 load_dotenv()
 
-discord_token = os.getenv('DISCORD_TOKEN')
+discord_token = os.getenv('DISCORD_TOKENA')
 
 CONVERSATION_LENGTH_LIMIT = 15
 
@@ -31,9 +31,10 @@ class MyClient(discord.Client):
         print("Initializing database...")
         db.init_database()
         print("Loading events...")
-        commands.events = set(event[0] for event in db.getevents())
+        # commands.events = set(event[0] for event in db.getevents())
         print(commands.events)
-        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
+        # await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
+        await client.change_presence(status=discord.Status.offline)
         print(f"We have logged in as {client.user}")
         print("Ready.")
 
@@ -56,7 +57,7 @@ class MyClient(discord.Client):
 async def fetchMessages(message: discord.Message):
     if not message.content.startswith("#"):
         # MyClient.conversation.put(message.author.name + ": " + message.content + ". ")
-        MyClient.conversation.put(message.author.display_name + ": " + message.content)
+        MyClient.conversation.put(str(message.author.id) + ": " + message.content)
     while MyClient.conversation.qsize() > CONVERSATION_LENGTH_LIMIT:
         MyClient.conversation.get()
     text = "\n".join(MyClient.conversation.queue)
@@ -65,10 +66,8 @@ async def fetchMessages(message: discord.Message):
     print(prompt + text, file=stderr)
     bot_response = turbo(prompt=prompt + text)
     result = await eventHandler(bot_response)
-    if len(result):
+    if result and len(result):
         await message.channel.send(result)
-    else:
-        await message.channel.send("(nothing found)")
 
 
 intents = discord.Intents.default()
@@ -82,47 +81,66 @@ async def get_name(discord_id):
 
 
 async def eventHandler(bot_response):
-    responses = bot_response.strip().splitlines()
-    print("asdf", responses, file=stderr)
-    response = list(filter(lambda l: "N/A" in l, responses))
-    if len(response) == 0:
-        return 
+    response = bot_response.strip().splitlines()
     # print(*responses, sep="\n")
-
+    print("deez")
     found = []
-    for response in responses:
-        response = response.split(";")
-        print(response)
-        event = response[0].strip()
-        if event.startswith("Event"):
-            event = event.split(":")[1].strip()
-        if event == "N/A":
-            continue
-        location = response[1].strip()
-        time = response[2].strip()
-        names = response[3].strip().split(", ")
+    print(response)
+    event = response[0].strip()
+    if event.startswith("Event"):
+        event = event.split(":")[1].strip()
+    if event == "N/A":
+        return []
+    print(event)
+    
+    location = response[1].strip()
+    if location.startswith("Location"):
+        location = location.split(":")[1].strip()
+    print(location)
 
-        user_id = MyClient.participants[0]
-        ids = list(set(MyClient.participants))
-        # print(names)
+    time = response[2].strip()
+    if time.startswith("Time"):
+        time = time.split(":", maxsplit=1)[1].strip()
+    if time == "N/A":
+        return []
+    
+    date = response[3].strip()
+    if date.startswith("Date"):
+        date = date.split(":")[1].strip()
+    if date == "N/A":
+        return []
 
-        participants = []
-        for id in ids:
-            if await get_name(id) in names:
-                participants.append(str(id))
-                names.remove(await get_name(id))
-        participants.extend(names)
+    time += " " + date
+    print(time)
 
-        if event not in commands.events:
-            print("detected event", [event, user_id,
-                time, location, participants])
-            found.append([event, user_id, time, location, participants])
-            if "N/A" in [event, user_id, time, location, participants]:
-                continue
+    participants = response[4].strip()
+    if participants.startswith("Participants"):
+        participants = participants.split(":")[1].strip()
+    if ", " in participants:
+        participants = participants.split(", ")
+    print(participants)
 
-            commands.addevent(user_id, event, time, location, participants)
-            commands.events.add(event)
-            
+
+    user_id = MyClient.participants[0]
+    # ids = list(set(MyClient.participants))
+    # # print(names)
+
+    # participants = []
+    # for id in ids:
+    #     if await get_name(id) in names:
+    #         participants.append(str(id))
+    #         names.remove(await get_name(id))
+    # participants.extend(names)
+
+    if event not in commands.events:
+        print("detected event", [event, user_id, time, location, participants])
+        found.append([event, user_id, time, location, participants])
+        if "N/A" in [event, user_id, time, location, participants]:
+            return []
+
+        commands.addevent(user_id, event, time, location, participants)
+        commands.events.add(event)
+        
     return found
 
 tree = app_commands.CommandTree(client)

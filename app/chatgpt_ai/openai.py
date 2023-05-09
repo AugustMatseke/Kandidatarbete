@@ -5,7 +5,6 @@ import os
 load_dotenv()
 
 openai.api_key = os.getenv('CHATGPT_API_KEY')
-print(openai.api_key)
 
 
 def chatgpt_response(prompt):

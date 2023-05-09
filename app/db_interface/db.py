@@ -85,14 +85,16 @@ def getevent(name):
 
 
 def get_token(discord_id):
-    cur.execute("SELECT token FROM calendar WHERE discord_id = ?", (discord_id,))
-    result = cur.fetchone()
+    discord_id = str(discord_id)
+    cur.execute("SELECT * FROM calendar WHERE discord_id = ?", (discord_id,))
+    result = cur.fetchall()
     if result:
         return result[1]
     return None
 
 
 def set_token(discord_id, token):
+    discord_id = str(discord_id)
     cur.execute("INSERT INTO calendar (discord_id, token) VALUES (?, ?)", (discord_id, token))
     con.commit()
-
+    return True
