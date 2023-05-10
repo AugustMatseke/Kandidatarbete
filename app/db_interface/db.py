@@ -9,7 +9,9 @@ def init_database():
     con = sqlite3.connect("data.db")
     cur = con.cursor()
 
-    cur.execute("CREATE TABLE IF NOT EXISTS events (name, time, location, owner, participants)")
+    cur.execute(
+        "CREATE TABLE IF NOT EXISTS events (name, time, location, owner, participants)"
+    )
     cur.execute("CREATE TABLE IF NOT EXISTS calendar (discord_id, token)")
     con.commit()
 
@@ -23,8 +25,10 @@ def addevent(name, time, location, owner, participants):
     result = cur.fetchone()
     if result:
         return False
-    cur.execute("INSERT INTO events (name, time, location, owner, participants) VALUES (?, ?, ?, ?, ?)",
-                (name, time, location, owner, participants))
+    cur.execute(
+        "INSERT INTO events (name, time, location, owner, participants) VALUES (?, ?, ?, ?, ?)",
+        (name, time, location, owner, participants),
+    )
     con.commit()
     return True
 
@@ -44,8 +48,10 @@ def modifyevent(name, time, location, user):
     owner = cur.fetchone()[3]
     if str(user) != owner:
         return False
-    cur.execute("UPDATE events SET time = ?, location = ? WHERE name = ?",
-                (time, location, name))
+    cur.execute(
+        "UPDATE events SET time = ?, location = ? WHERE name = ?",
+        (time, location, name),
+    )
     con.commit()
     return True
 
@@ -56,8 +62,9 @@ def joinevent(name, user):
     if user in participants.split(", "):
         return False
     participants = participants + ", " + user
-    cur.execute("UPDATE events SET participants = ? WHERE name = ?",
-                (participants, name))
+    cur.execute(
+        "UPDATE events SET participants = ? WHERE name = ?", (participants, name)
+    )
     con.commit()
     return True
 
@@ -68,8 +75,9 @@ def leaveevent(name, user):
     if user not in participants.split(", "):
         return False
     participants = participants.replace(", " + user, "")
-    cur.execute("UPDATE events SET participants = ? WHERE name = ?",
-                (participants, name))
+    cur.execute(
+        "UPDATE events SET participants = ? WHERE name = ?", (participants, name)
+    )
     con.commit()
     return True
 
@@ -95,6 +103,8 @@ def get_token(discord_id):
 
 def set_token(discord_id, token):
     discord_id = str(discord_id)
-    cur.execute("INSERT INTO calendar (discord_id, token) VALUES (?, ?)", (discord_id, token))
+    cur.execute(
+        "INSERT INTO calendar (discord_id, token) VALUES (?, ?)", (discord_id, token)
+    )
     con.commit()
     return True

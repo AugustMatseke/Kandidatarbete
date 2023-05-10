@@ -16,9 +16,10 @@ import requests
 
 load_dotenv()
 
-discord_token = os.getenv('DISCORD_TOKENA')
+discord_token = os.getenv("DISCORD_TOKENA")
 
 CONVERSATION_LENGTH_LIMIT = 15
+
 
 class MyClient(discord.Client):
     conversation = Queue()
@@ -53,6 +54,7 @@ class MyClient(discord.Client):
 
         self.participants.append(message.author.id)
         await fetchMessages(message)
+
 
 async def fetchMessages(message: discord.Message):
     if not message.content.startswith("#"):
@@ -92,7 +94,7 @@ async def eventHandler(bot_response):
     if event == "N/A":
         return []
     print(event)
-    
+
     location = response[1].strip()
     if location.startswith("Location"):
         location = location.split(":")[1].strip()
@@ -103,7 +105,7 @@ async def eventHandler(bot_response):
         time = time.split(":", maxsplit=1)[1].strip()
     if time == "N/A":
         return []
-    
+
     date = response[3].strip()
     if date.startswith("Date"):
         date = date.split(":")[1].strip()
@@ -119,7 +121,6 @@ async def eventHandler(bot_response):
     if ", " in participants:
         participants = participants.split(", ")
     print(participants)
-
 
     user_id = MyClient.participants[0]
     # ids = list(set(MyClient.participants))
@@ -140,53 +141,90 @@ async def eventHandler(bot_response):
 
         commands.addevent(user_id, event, time, location, participants)
         commands.events.add(event)
-        
+
     return found
+
 
 tree = app_commands.CommandTree(client)
 
 
-@tree.command(name="addevent", description="Add an event", guild=discord.Object(id=1064844577820921886), )
-async def addevent(interaction: discord.Interaction, name: str, time: str, location: str):
+@tree.command(
+    name="addevent",
+    description="Add an event",
+    guild=discord.Object(id=1064844577820921886),
+)
+async def addevent(
+    interaction: discord.Interaction, name: str, time: str, location: str
+):
     if commands.addevent(interaction.user.id, name, time, location):
         await interaction.response.send_message("Event added.")
     else:
         await interaction.response.send_message("Event already exists.")
 
 
-@tree.command(name="removeevent", description="Delete an event", guild=discord.Object(id=1064844577820921886), )
+@tree.command(
+    name="removeevent",
+    description="Delete an event",
+    guild=discord.Object(id=1064844577820921886),
+)
 async def removeevent(interaction: discord.Interaction, name: str):
     if commands.removeevent(interaction.user.id, name):
         await interaction.response.send_message("Event removed.")
     else:
-        await interaction.response.send_message("Event does not exist. (Or you do not own it.)")
+        await interaction.response.send_message(
+            "Event does not exist. (Or you do not own it.)"
+        )
 
 
-@tree.command(name="modifyevent", description="Modify an event", guild=discord.Object(id=1064844577820921886), )
-async def modifyevent(interaction: discord.Interaction, name: str, time: str, location: str):
+@tree.command(
+    name="modifyevent",
+    description="Modify an event",
+    guild=discord.Object(id=1064844577820921886),
+)
+async def modifyevent(
+    interaction: discord.Interaction, name: str, time: str, location: str
+):
     if commands.modifyevent(interaction.user.id, name, time, location):
         await interaction.response.send_message("Event modified.")
     else:
-        await interaction.response.send_message("Event does not exist. (Or you do not own it.)")
+        await interaction.response.send_message(
+            "Event does not exist. (Or you do not own it.)"
+        )
 
 
-@tree.command(name="joinevent", description="Join an event", guild=discord.Object(id=1064844577820921886), )
+@tree.command(
+    name="joinevent",
+    description="Join an event",
+    guild=discord.Object(id=1064844577820921886),
+)
 async def joinevent(interaction: discord.Interaction, name: str):
     if commands.joinevent(interaction.user.id, name):
         await interaction.response.send_message("Joined event.")
     else:
-        await interaction.response.send_message("Event does not exist. (Or you are already in it.)")
+        await interaction.response.send_message(
+            "Event does not exist. (Or you are already in it.)"
+        )
 
 
-@tree.command(name="leaveevent", description="Leave an event", guild=discord.Object(id=1064844577820921886), )
+@tree.command(
+    name="leaveevent",
+    description="Leave an event",
+    guild=discord.Object(id=1064844577820921886),
+)
 async def leaveevent(interaction: discord.Interaction, name: str):
     if commands.leaveevent(interaction.user.id, name):
         await interaction.response.send_message("Left event.")
     else:
-        await interaction.response.send_message("Event does not exist. (Or you are not in it.)")
+        await interaction.response.send_message(
+            "Event does not exist. (Or you are not in it.)"
+        )
 
 
-@tree.command(name="getevents", description="Get all events", guild=discord.Object(id=1064844577820921886), )
+@tree.command(
+    name="getevents",
+    description="Get all events",
+    guild=discord.Object(id=1064844577820921886),
+)
 async def getevents(interaction: discord.Interaction):
     if len(commands.getevents()) == 0:
         await interaction.response.send_message("No events.")
@@ -194,7 +232,11 @@ async def getevents(interaction: discord.Interaction):
         await interaction.response.send_message(", ".join(commands.getevents()))
 
 
-@tree.command(name="details", description="Get an event", guild=discord.Object(id=1064844577820921886), )
+@tree.command(
+    name="details",
+    description="Get an event",
+    guild=discord.Object(id=1064844577820921886),
+)
 async def details(interaction: discord.Interaction, name: str):
     name, time, location, owner, participants = commands.getevent(name)
     owner = await get_name(owner)
@@ -203,6 +245,9 @@ async def details(interaction: discord.Interaction, name: str):
     embed.add_field(name="Time", value=time, inline=True)
     embed.add_field(name="Location", value=location, inline=False)
     embed.add_field(name="Owner", value=owner, inline=True)
-    embed.add_field(name="Participants", value= ", ".join([owner] + participants)(
-        participants), inline=False)
+    embed.add_field(
+        name="Participants",
+        value=", ".join([owner] + participants)(participants),
+        inline=False,
+    )
     await interaction.response.send_message(embed=embed)
