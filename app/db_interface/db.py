@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, json
 
 con = None
 cur = None
@@ -56,9 +56,9 @@ def modifyevent(name, time, location, user):
     return True
 
 
-def joinevent(name, user):
+def joinevent(name, user, event):
     cur.execute("SELECT * FROM events WHERE name = ?", (name,))
-    participants = cur.fetchone()[4]
+    participants = cur.fetchone()[4] # TODO: change array to dict stuff
     if user in participants.split(", "):
         return False
     participants = participants + ", " + user
@@ -93,16 +93,16 @@ def getevent(name):
 
 
 def get_token(discord_id):
-    discord_id = str(discord_id)
-    cur.execute("SELECT * FROM calendar WHERE discord_id = ?", (discord_id,))
+    discord_id = int(discord_id)
+    cur.execute("SELECT token FROM calendar WHERE discord_id = ?", (discord_id,))
     result = cur.fetchall()
     if result:
-        return result[1]
+        return json.loads(result[0][0])
     return None
 
 
 def set_token(discord_id, token):
-    discord_id = str(discord_id)
+    discord_id = int(discord_id)
     cur.execute(
         "INSERT INTO calendar (discord_id, token) VALUES (?, ?)", (discord_id, token)
     )

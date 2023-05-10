@@ -91,10 +91,11 @@ async def do_auth(message: discord.Message):
 
 
 def add_event(user_id, name, start, end=None, location=""):
-    print("for user", user_id, "found token", db.get_token(user_id))
+    if not db.get_token(user_id):
+        return None
+    
     temp = dict()
-    # creds = Credentials.from_authorized_user_info(db.get_token(user_id), SCOPES)
-    creds = Credentials.from_authorized_user_info(temp, SCOPES)
+    creds = Credentials.from_authorized_user_info(db.get_token(user_id), SCOPES)
     service = build("calendar", "v3", credentials=creds)
 
     event = {
@@ -115,7 +116,7 @@ def add_event(user_id, name, start, end=None, location=""):
     return event
 
 
-def remove_event(event_id, author_id):
+def remove_event(author_id, event_id):
     creds = Credentials.from_authorized_user_info(db.get_token(author_id), SCOPES)
     service = build("calendar", "v3", credentials=creds)
 
@@ -133,6 +134,9 @@ def modify_event(
     event_id,
     author_id,
     name,
+    start,
+    location="",
+    end=None,
 ):
     creds = Credentials.from_authorized_user_info(db.get_token(author_id), SCOPES)
     service = build("calendar", "v3", credentials=creds)

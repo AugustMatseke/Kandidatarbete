@@ -1,5 +1,7 @@
 import app.db_interface.db as db
 import app.gcal.gcal_api as gcal
+import app.discord_bot.discord_api as discord_api
+import asyncio
 
 # This is a set of the names of all events in the database.
 # It contains a dictionary of all events, with each event
@@ -18,17 +20,28 @@ def getevent(name: str):
     return db.getevent(name)
 
 
-def addevent(user_id: str, name: str, time: str, location: str, participants: list):
+async def addevent(
+    user_id: str, name: str, time: str, location: str, participants: list
+):
     global events
     if name in events:
         return False
-    db.addevent(name, time, location, str(user_id), participants)
+
     events[name] = dict()
+    loop = asyncio.get_event_loop()
     for participant in filter(str.isnumeric, participants):
-        # try:
+        if not str(participant) == str(223424602150273024):
+            continue
+
         event = gcal.add_event(participant, name, time, location=location)
-        events[name][participant] = event["id"]
-        # except:pass
+        if event:
+            events[name][participant] = event["id"]
+        else:
+            await (await (await discord_api.client.fetch_user(int(participant))).create_dm()).send(
+                "You are a participant in an event, but you have not logged in to Google Calendar. If you would like to log in to Google Calendar, please reply with `auth calendar`. To join the event once you have logged in, go to the server where the event was mentioned and type `/joinevent " + name + "`."
+            )
+
+    db.addevent(name, time, location, str(user_id), str(events[name]))
     return True
 
 
@@ -46,6 +59,8 @@ def removeevent(user_id: str, name: str):
 
     for participant in events[name]:
         gcal.remove_event(participant, events[name][participant])
+
+    del events[name]
 
     return True
 

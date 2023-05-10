@@ -16,7 +16,7 @@ import requests
 
 load_dotenv()
 
-discord_token = os.getenv("DISCORD_TOKENA")
+discord_token = os.getenv("DISCORD_TOKEN")
 
 CONVERSATION_LENGTH_LIMIT = 15
 
@@ -34,8 +34,7 @@ class MyClient(discord.Client):
         print("Loading events...")
         # commands.events = set(event[0] for event in db.getevents())
         print(commands.events)
-        # await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
-        await client.change_presence(status=discord.Status.offline)
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
         print(f"We have logged in as {client.user}")
         print("Ready.")
 
@@ -66,7 +65,8 @@ async def fetchMessages(message: discord.Message):
     # prompt = f"Find all the events, meetings or other gatherings in the following conversation. Find their names, locations, times, dates and participants. For each detected event, meeting or gathering, return a list with the name, location, time and date, and participants in that specific order. Do not label the values, just list them with semicolons in between. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
     prompt = f"Observe the following conversation. If an event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
     print(prompt + text, file=stderr)
-    bot_response = turbo(prompt=prompt + text)
+    bot_response = turbo(prompt=prompt + text) # TODO: Change to davinci
+    # bot_response = davinci(prompt=prompt + text)
     result = await eventHandler(bot_response)
     if result and len(result):
         await message.channel.send(result)
@@ -84,8 +84,6 @@ async def get_name(discord_id):
 
 async def eventHandler(bot_response):
     response = bot_response.strip().splitlines()
-    # print(*responses, sep="\n")
-    print("deez")
     found = []
     print(response)
     event = response[0].strip()
@@ -93,12 +91,10 @@ async def eventHandler(bot_response):
         event = event.split(":")[1].strip()
     if event == "N/A":
         return []
-    print(event)
 
     location = response[1].strip()
     if location.startswith("Location"):
         location = location.split(":")[1].strip()
-    print(location)
 
     time = response[2].strip()
     if time.startswith("Time"):
@@ -113,25 +109,14 @@ async def eventHandler(bot_response):
         return []
 
     time += " " + date
-    print(time)
 
     participants = response[4].strip()
     if participants.startswith("Participants"):
         participants = participants.split(":")[1].strip()
     if ", " in participants:
         participants = participants.split(", ")
-    print(participants)
 
     user_id = MyClient.participants[0]
-    # ids = list(set(MyClient.participants))
-    # # print(names)
-
-    # participants = []
-    # for id in ids:
-    #     if await get_name(id) in names:
-    #         participants.append(str(id))
-    #         names.remove(await get_name(id))
-    # participants.extend(names)
 
     if event not in commands.events:
         print("detected event", [event, user_id, time, location, participants])
@@ -139,10 +124,8 @@ async def eventHandler(bot_response):
         if "N/A" in [event, user_id, time, location, participants]:
             return []
 
-        commands.addevent(user_id, event, time, location, participants)
-        commands.events.add(event)
+        await commands.addevent(user_id, event, time, location, participants)
 
-    return found
 
 
 tree = app_commands.CommandTree(client)
