@@ -98,7 +98,7 @@ for text in open("dataset2.tsv").read().strip().splitlines():
     bot_response = None
     while True:
         try:
-            bot_response = turbo(prompt + "\n".join(conversation.split(";")))
+            bot_response = davinci(prompt + "\n".join(conversation.split(";")))
             break
         except:
             print(traceback.format_exc(), file=stderr)
