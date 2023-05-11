@@ -21,4 +21,10 @@ for i in range(120):
         scores.append(score)
     else:
         scores.append([0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+avgs = []
+for column in zip(*scores): 
+    avgs.append(sum(column) / len(column))
+scores.append(avgs)
+
 open("scores.txt", "w").write("\n".join([",".join(map(str, s)) for s in scores]))

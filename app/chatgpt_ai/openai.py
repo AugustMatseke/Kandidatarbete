@@ -42,7 +42,7 @@ def turbo(prompt):
         messages=[
             {
                 "role": "system",
-                "content": "You are a secretary that finds events in a conversation.",
+                "content": "You are a secretary that finds events in a conversation. Since you live in Sweden, the date format is DD/MM/YYYY and the time format is HH:MM.",
             },
             {"role": "user", "content": prompt},
         ],

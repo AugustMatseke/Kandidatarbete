@@ -10,57 +10,89 @@ import datetime
 load_dotenv()
 
 openai.api_key = os.getenv('CHATGPT_API_KEY')
-print(openai.api_key)
 
 # today = datetime.datetime.now().strftime('%H:%M %d/%m/%Y')
 today = "12:00 18/04/2023"
 print(today)
 
-def chatgpt_response(prompt):
+def davinci(prompt):
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt=prompt,
         temperature=0,  # 0-2 lower= more deterministic, higher = more random
-        max_tokens=100
+        max_tokens=100,
     )
     response_dict = response.get("choices")
     if response_dict and len(response_dict) > 0:
         prompt_response = response_dict[0]["text"]
+
     return prompt_response
 
+
+def turbo(prompt):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0301",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a secretary that finds events in a conversation. Since you live in Sweden, the date format is DD/MM/YYYY and the time format is HH:MM.",
+            },
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0,  # 0-2 lower= more deterministic, higher = more random
+        max_tokens=100,
+    )
+    response_dict = response.get("choices")
+    if response_dict and len(response_dict) > 0:
+        prompt_response = response_dict[0]["message"]["content"]
+
+    return prompt_response
+
+
 def eventHandler(bot_response):
-    responses = bot_response.strip().splitlines()
-    print("asdf", responses, file=stderr)
-    response = list(filter(lambda l: "N/A" in l, responses))
-    if len(response) == 0:
-        return 
-
+    response = bot_response.strip().splitlines()
     found = []
-    for response in responses:
-        response = response.split(";")
-        # print(response)
-        event = response[0].strip()
-        if event.startswith("Event"):
-            event = event.split(":")[1].strip()
-        if event == "N/A":
-            continue
-        location = response[1].strip()
-        time = response[2].strip()
-        if time == "N/A":
-            continue
-        names = response[3].strip().split(", ")
+    print("kekw", response)
+    event = response[0].strip()
+    if event.startswith("Event"):
+        event = event.split(":")[1].strip()
+    if event == "N/A":
+        return []
 
-        # print(";".join([event, location, time, ",".join(names)]))
-        found.append([event, location, time, ",".join(names)])
+    location = response[1].strip()
+    if location.startswith("Location"):
+        location = location.split(":")[1].strip()
 
-    return found
+    time = response[2].strip()
+    if time.startswith("Time"):
+        time = time.split(":", maxsplit=1)[1].strip()
+    # if time == "N/A":
+    #     return []
+
+    date = response[3].strip()
+    if date.startswith("Date"):
+        date = date.split(":")[1].strip()
+    # if date == "N/A":
+    #     return []
+
+    time += " " + date
+
+    participants = response[4].strip()
+    if participants.startswith("Participants"):
+        participants = participants.split(":")[1].strip()
+    if ", " in participants:
+        participants = participants.split(", ")
+
+    return [[event, location, time, participants[0], participants]]
+
+
 
 with open('log.txt', 'w') as f:
-    for text in open("dataset2.tsv").read().strip().splitlines()[1:]:
+    for text in open("dataset2.tsv").read().strip().splitlines():
         conversation, *stuff = text.split("\t")
-        # print("\n".join(conversation.split(";")))
-        bot_response = chatgpt_response(
-                prompt=f"Find all the events, meetings and/or other gatherings in the following conversation. For each detected event, meeting or gathering, return a list with the name, location, time and date, and participants. Do not label the values, just list them with semicolons in between. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. If a time cannot be found, return N/A as the time. Otherwise, calculate the absolute time and date of each event given that the current time and date is {today}. The conversation is as follows: " + "\n".join(conversation.split(";")))
+        prompt = f"Observe the following conversation. If one single event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
+        bot_response = turbo(
+                prompt=prompt + "\n".join(conversation.split(";")))
         try:
             result = eventHandler(bot_response)
             print(result)
