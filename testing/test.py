@@ -7,6 +7,9 @@ import traceback
 
 import datetime
 
+from time import sleep
+
+
 load_dotenv()
 
 openai.api_key = os.getenv('CHATGPT_API_KEY')
@@ -80,27 +83,40 @@ def eventHandler(bot_response):
     participants = response[4].strip()
     if participants.startswith("Participants"):
         participants = participants.split(":")[1].strip()
+    if " and " in participants:
+        participants = participants.replace(" and ", ", ")
     if ", " in participants:
         participants = participants.split(", ")
 
-    return [[event, location, time, participants[0], participants]]
+    return [[event, location, time, participants[0], ", ".join(participants)]]
 
 
 
-with open('log.txt', 'w') as f:
-    for text in open("dataset2.tsv").read().strip().splitlines():
-        conversation, *stuff = text.split("\t")
-        prompt = f"Observe the following conversation. If one single event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
-        bot_response = turbo(
-                prompt=prompt + "\n".join(conversation.split(";")))
+for text in open("dataset2.tsv").read().strip().splitlines():
+    conversation, *stuff = text.split("\t")
+    prompt = f"Observe the following conversation. If one single event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
+    bot_response = None
+    while True:
         try:
-            result = eventHandler(bot_response)
-            print(result)
-            if len(result) == 1:
-                f.write(";".join(result[0]) + "\n")
-            else:
-                f.write("\n")
+            bot_response = turbo(prompt + "\n".join(conversation.split(";")))
+            break
         except:
-            # print(traceback.format_exc())
-            # print(conversation)
-            f.write("\n")
+            print(traceback.format_exc(), file=stderr)
+            print(conversation, file=stderr)
+            print("retrying...", file=stderr)
+            sleep(1)
+
+    out = ""     
+    try:
+        result = eventHandler(bot_response)
+        print(len(result), result)
+        if len(result) == 1:
+            print("saving as:", ";".join(result[0]))
+            out = ";".join(result[0]) + "\n"
+        else:
+            out = "\n"
+    except:
+        print(traceback.format_exc())
+        # print(conversation)
+        out = "\n"
+    open("log.txt", "a").write(out)

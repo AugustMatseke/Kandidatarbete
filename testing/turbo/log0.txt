@@ -1,0 +1,120 @@
+Bob's birthday party;N/A;2:00 PM 20/05/2023;Bob;Bob, Dom, Rachel, Gloria
+Party on a sailboat;Sailboat;N/A N/A;Jackie;Jackie, Rebecca, Jackie's best friends, Jackie's family, Gary
+House decoration planning;N/A;N/A N/A;Arthur;Arthur, Evelyn
+Choosing a lawyer for a criminal case;N/A;N/A N/A;Cameron;Cameron, Sara, Zoey, Susie
+Invitation to book club;N/A;N/A N/A;Katy;Katy, Brandon, Vince, Karina
+Fixing the garden;N/A;N/A N/A;Marilyn;Marilyn, Edward, Troy, Maya
+Back to school shopping with Aunt Maria;N/A;4:00 PM 11/08/2023;Sharon;Sharon, Gerald, Aunt Maria
+Choosing a DJ for anniversary party;N/A;N/A N/A;Lucy;Lucy, Todd
+Meeting with Alice and Mindy;N/A;N/A N/A;Donna;Donna, Chloe
+Russell and Stacy working in their garden;N/A;Afternoon (N/A), absolute time unknown N/A;Catherine;Catherine, Russell, Stacy, Shane
+Sunday Brunch;N/A;N/A 15/05/2023;Emma;Emma, William, Lisa, Don
+Back to school shopping with Aunt Maria;N/A;16:00 11/05/2023;Sharon;Sharon, Gerald, Aunt Maria
+
+Starting a book club with Matt and Catherine;Library;N/A N/A;Rodger;Rodger, Clary, Matt, Catherine
+Decorating Bobby's lawn for Halloween;Bobby's lawn;N/A N/A;Ryan;Ryan, Jean, Deborah, Bob
+Dinner invitation to new neighbor Melinda;N/A;N/A Next week (absolute date not given);Janice;Janice, Darren, Melinda
+
+Watching a horror movie at the cinema;Cinema (unknown);N/A 11/05/2023;Peggy;Peggy, Joe
+Going to a new brewery downtown for a double date with Tom and Janet;Downtown;N/A 14/05/2023;Bill;Bill, Martha, Tom, Janet
+Discussion about schooling options for Ellen;N/A;N/A N/A;Macy;Macy, Mason, Ellen
+Girls night in;N/A;N/A 11/05/2023;Bonnie;Bonnie, Sydney
+Hockey game and night out;N/A;19:00 13/05/2023;Vince;Vince, Amelie
+Bruce's upcoming birthday gift discussion;N/A;N/A N/A;Judy;Judy, Bruce, Aunt Maya
+Netflix night with taco bar;N/A;N/A N/A;Amber;Amber, Sherrie, Ellie, Janice
+
+Yearly shopping trip with Aunt Alice;N/A;16:00 11/05/2023;Steve;Steve, Judy, Aunt Alice
+Dinner party;N/A;N/A N/A;Maria;Maria, Rafael, Shawn, Laura, Alan, Peggy
+Grace's birthday celebration;N/A;N/A 11/05/2023 (based on the current date);Kathleen;Kathleen, Ricky,, Grace
+Patricia and Julie argue about a letter Julie wrote to Lance.;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Hiking at XYZ hills;XYZ hills;N/A 15/05/2023;Christine;Christine, Eva,, Andy
+Discussion about crush on Paul and decision to maintain friendship only.;N/A;N/A N/A;Kate;Kate, Mindy, Paul, Craig
+Amber's one-week stay with Harry and Tanya;N/A;N/A 11/05/2023 - 18/05/2023;Harry;Harry, Tanya, Amber
+Margaret and Mark plan to ask their neighbor for gardening tips in exchange for mowing their lawn.;Neighbor's house.;N/A. N/A.;Margaret;Margaret, Mark, Timothy (neighbor), Sarah (gym acquaintance).
+Meeting to check on Justin's well-being;N/A;N/A N/A;Carlos;Carlos, Russell
+Joshua's birthday party;N/A;N/A 12/05/2023;Joshua;Joshua, Scott, Lara, Madison
+Cooking dinner for Aunt Zoey;N/A;8:00 PM 11/05/2023;Joanna;Joanna, Christina, Mom, Aunt Zoey
+Meeting with a lawyer about custody of Zoey;N/A;This weekend (exact time not specified) 14-15/05/2023 (exact date not specified);Wilson;Wilson, Peggy,, Stephan (to be confirmed)
+Sister's birthday celebration;N/A;N/A N/A;Danielle;Danielle, Henry, Maria
+Retirement party for Karen and Steven;N/A;N/A N/A;Judy;Judy, Kelly
+Richard visiting Chicago;Chicago;N/A N/A;Brian;Brian, Jose, Richard
+Peter asks Greg for a contact at Ford for a friend.;N/A;N/A N/A;Peter;Peter, Greg
+Dinner party;N/A;N/A 11/05/2023;Joe;Joe, Carol, Henry, Kelly, Christina,, Walter
+Hang out with Jason, Gary, William, and Chris;Anthony's house, Postinos, the beach, and Anthony's place;Meet earlier, go to the beach and hang out earlier, come back to Anthony's place to shower and change, and go get drinks and appetizers Sunday;Anthony;Anthony, Jason, Gary, William,, Chris
+Beach trip to Aki Beach;Aki Beach;10:00 11/06/2023 (2nd weekend in June);Henry;Henry, Paul, Jack, Dennis,, Alex (mentioned but not confirmed)
+Planning a hiking trip to the mountains;N/A;N/A N/A;Tim;Tim, George, Jeff, Matt
+Watching baseball game;N/A;N/A 14/05/2023;Jack;Jack, Ronald, Patrick, Steve
+Trip to Six Flags;Six Flags;N/A 14/05/2023;Amanda;Amanda, Melissa, Frank, Catherine, Edward
+Custody battle discussion;N/A;N/A N/A;Ronald;Ronald, Melissa
+Dinner party;N/A;18:00 11/05/2023;Roger;Roger, Malcolm,, the Watsons
+Trip;N/A;N/A 14/05/2023 - 15/05/2023 (assuming "this weekend" refers to the upcoming weekend);Larry;Larry, Amy, Angela, Alex, Jack
+Hiking trip;N/A;N/A N/A;Larry;Larry, Amy, Angela, Alex, Jack
+Department Group Lunch;N/A;N/A N/A;Diane;Diane, Jackie, Mindy, Joyce, Donna
+
+Job referral for Justin at Ford;Ford;N/A N/A;Peter;Peter, Greg, Sam
+Fourth of July celebration at Howard and Valerie's;Howard and Valerie's place;N/A 04/07/2023;Stacy;Stacy, Mark
+Complaints about coworker Donna's behavior and hygiene.;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Camping trip planning;Emma Wood State Beach;N/A June (absolute date not specified);Henry;Henry, Paul
+Going to see a movie;Cinemax 26 on Carson Boulevard;2:00PM 14/05/2023;Jack;Jack, Danielle,, possibly Karen.
+Stephanie buying gifts for John and Kim;N/A;N/A 12/05/2023;Stephanie;Stephanie, Elizabeth, John, Kim
+Roger wants to confess his feelings to Michelle;N/A;N/A N/A;Roger;Roger, Barry, Michelle
+Gift giving to John and Kim;N/A;N/A Next week (absolute date not given);Stephanie;Stephanie, Elizabeth, John, Kim
+Hiking on Granite Trail with Richard;Granite Trail;N/A 13/05/2023;Jose;Jose, Brian, Richard
+Going to a brewery downtown with Martha, Evan, Tom, and Janet;Downtown brewery;N/A 14/05/2023 (assuming the conversation is happening on 11/05/2023 and "this weekend" refers to the upcoming weekend);Bill;Bill, Martha, Evan, Tom,, Janet
+Bruce's upcoming birthday gift discussion;N/A;N/A N/A;Judy;Judy, Bruce, Aunt Maya
+Camping Trip Planning;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Planning a dinner party;N/A;N/A N/A;Joe;Joe, Carol, Henry, Kelly, Christina, Walter
+Meeting with Anthony's colleagues;N/A;N/A N/A;Chris;Chris, Anthony, Jason
+Pick up Barry and Martha from Union Station and take them to dinner;Union Station;5:00 PM 12/05/2023;Adam;Adam, Nathan, Barry, Martha
+Dinner;N/A;N/A 12/05/2023;Carol;Carol, Joe, Henry, Kelly, Christina, Walter
+Lauren asks Nicole for help in buying a new Chevrolet car.;N/A;N/A N/A;Lauren;Lauren, Nicole
+Dinner with Shirley;N/A;Tonight (absolute time not given) 11/05/2023;Eric;Eric, Lauren, Shirley
+Meeting with Shirley, Ben, and Anna;N/A;Tonight (exact time not given) 11/05/2023;Eric;Eric, Lauren, Shirley, Ben, Anna
+Car purchase;Dealership in town;N/A N/A;Lauren;Lauren, Nicole, Pamela
+Beach trip;Atlantic Beach;9:00 13/05/2023;Paul;Paul, Henry, Alex, Dennis, Jack
+Going to a baseball game;N/A;N/A 14/05/2023 (Saturday);Jack;Jack, Ronald, Patrick, Steve
+Keith's interest in Tara;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Boat shopping;N/A;N/A N/A;Mindy;Mindy, Keith, Logan, Paul
+Checking out the brewery;N/A;11:00 (assumed start time based on typical brewery hours) 14/05/2023 (Saturday);Jack;Jack, Pamela, Wilson, Leslie, Tom
+Tyler plans to tell Sandra something that is bothering him and will take her out to eat to talk about it.;N/A;N/A N/A;Larry;Larry, Tyler, Sandra.
+Karina's annual check-up appointment;N/A;N/A 11/05/2023;Karina;Karina, Dr. Benjamin
+Offering to help Karina with the trash due to rat sighting;Karina's house;N/A 11/05/2023;Scott;Scott, Eva, Karina
+Department group lunch;N/A;N/A 11/05/2023;Cathy;Cathy, Kelly, Peggy, Caroline
+Bob is going to the store to buy vegetables for dinner.;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Grocery shopping;N/A;N/A 11/05/2023;Mindy;Mindy, Madison
+Camping trip planning;;Location: Emma Wood State Beach ;T;T, i, m, e, :,  , N, /, A
+Monica asking Matt for notes;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Emily asking Walter for Emma's number to get notes for a missed lecture.;;Location: N/A ;T;T, i, m, e, :,  , N, /, A
+Job referral for Justin at Ford;Ford;N/A N/A;Peter;Peter, Greg, Sam
+Picnic;N/A;N/A 18/05/2023;Stephanie;Stephanie, William, Kevin,, the Winstons
+Car purchase discussion;N/A;N/A N/A;Lauren;Lauren, Nicole, Pamela
+Going to a baseball game;N/A;N/A 14/05/2023 (Saturday);Jack;Jack, Ronald, Patrick, Steve
+Roger wants to express his feelings to Michelle;N/A;N/A N/A;Roger;Roger, Barry, Michelle
+Invite new neighbor Melinda over for dinner;N/A;N/A Next week (absolute date not given);Janice;Janice, Darren, Melinda
+Buying furniture for LindaMartin's house remodeling;Furniture store;N/A N/A;Cameron;Cameron, Kyle, LindaMartin
+Watching a game;N/A;N/A 11/05/2023;Anthony;Anthony, Chris, Jason, Gary, William, Alice
+Watching movies;N/A;N/A N/A;Carol;Carol, Joe, Henry, Kelly
+Run in the park;Park;N/A N/A;Linda;Linda, Meredith
+Rebecca asks Brian to grab her books from Laura's.;N/A;N/A N/A;Rebecca;Rebecca, Brian
+Watching movies;N/A;N/A N/A;Joe;Joe, Carol, Henry, Kelly
+Planning a road trip;N/A;N/A N/A;Roger;Roger, Malcolm, Shane, Paul, Ivan
+Going to the movies to watch Thor;N/A;20:00 11/05/2023;Chris;Chris, Mark, Tom,, others who agree to go.
+Jessie and Jackie's breakup;N/A;N/A N/A;Derrick;Derrick, Ben, Jessie, Jackie
+The Housemakers upcoming show;N/A;4 PM 18 May 2023;Ruth;Ruth, Evelyn
+Eugene's breakup with Madison;N/A;N/A N/A;Eugene;Eugene, Madison
+Planning a trip to Seattle;Seattle;N/A N/A;Lauren;Lauren, Shirley, Anna, Eric,, two others
+Hanging out with colleagues;N/A;N/A N/A;Anthony;Anthony, Chris, Jason, Gary, William
+Dinner and bar with Lara, Brandon, Patricia, and George;N/A;Dinner on Friday, bar after Friday, DD/MM/YYYY;Lara;Lara, Brandon, Patricia, George
+Emma's party;N/A;19:00 (assumed) 14/05/2023;Christopher;Christopher, Catherine, Brenda, Jon, George, Peter, Emma
+Timothy invited Martin to be his guest on Jeopardy.;N/A;N/A N/A;Timothy;Timothy, Martin
+Six Flags amusement park outing;N/A;N/A 14/05/2023 (Saturday);Melissa;Melissa, Amanda, Frank, Catherine,, Edward.
+
+Lunch at Josepies;Josepies on Main Street;1 PM 17/05/2023;Kevin;Kevin, Harold, Rachel
+
+Pick up Patrick and Sherrie from the airport and take them to Union Station for lunch.;Airport and Union Station.;3:00 PM. Wednesday, DD/MM/YYYY (not specified).;Diane;Diane, Danielle, Patrick,, Sherrie.
+Art exhibit;N/A;N/A Saturday, 13 May 2023;Christopher;Christopher, Carol, Tara
+Watching a baseball game;N/A;N/A 14/05/2023;Eric;Eric, Matt, Walter, Kenneth
+Watching a baseball game;N/A;8:00 PM 18/05/2023;Doug;Doug, Aaron, Richard, Samuel
+Seeing Craig;Craig's place;N/A N/A;Carlos;Carlos, Edgar, George, Craig
+
+Movie;N/A;N/A 15/05/2023;Dwight;Dwight, Jordan, Philip, Andrew
