@@ -3,11 +3,11 @@ from sys import argv
 
 scorer = rouge_scorer.RougeScorer(['rouge1'], use_stemmer=True)
 
-if len(argv):
+if len(argv) > 1:
     man = open(argv[1]).read().split("\n")
     bot = open(argv[2]).read().split("\n")
 else:
-    man = open("ref3.tsv").read().split("\n")
+    man = open("ref4.tsv").read().split("\n")
     bot = open("log.txt").read().split("\n")
 
 scores = []
@@ -24,6 +24,8 @@ for i in range(120):
         score.extend(list(*scorer.score(mlocation, blocation).values()))
         score.extend(list(*scorer.score(mparticipants, bparticipants).values()))
         scores.append(score)
+    elif man[i] == bot[i]:
+        scores.append([1, 1, 1, 1, 1, 1, 1, 1, 1])
     else:
         scores.append([0, 0, 0, 0, 0, 0, 0, 0, 0])
 
@@ -32,4 +34,4 @@ for column in zip(*scores):
     avgs.append(sum(column) / len(column))
 scores.append(avgs)
 
-open("scores2.txt", "w").write("\n".join([",".join(map(str, s)) for s in scores]))
+open("scores.txt", "w").write("\n".join([",".join(map(str, s)) for s in scores]))

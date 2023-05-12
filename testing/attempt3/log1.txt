@@ -1,0 +1,120 @@
+Birthday Party;N/A;14:00 22/04/2023;Bob;Bob, Dom, Rachel, Gloria
+
+
+
+Book Club Invitation;Library;N/A 18/04/2023;Katy;Katy, Brandon, Vince, Karina
+
+
+
+
+
+Sunday Brunch;N/A;N/A 24/04/2023;Emma;Emma, William, Lisa, Don
+
+
+
+
+Dinner;N/A;N/A 25/04/2023;Janice;Janice, Darren, Melinda
+
+
+Trying out new brewery downtown;Downtown;N/A 22/04/2023;Martha;Martha, Bill, Evan, Tom, Janet
+
+
+Hockey game;N/A;19:00 22/04/2023;Vince;Vince, Amelie
+Bruce's Birthday;N/A;N/A 18/04/2023;Bruce;Bruce, Judy, Aunt Maya
+
+
+Yearly shopping trip;N/A;16:00 18/04/2023;Steve;Steve, Judy, Aunt Alice
+
+Grace's Birthday;N/A;N/A 18/04/2023 (current date);Ricky;Ricky, Kathleen, Grace
+
+Hiking;XYZ hills;N/A 24/04/2023;Christine;Christine, Eva, Andy
+
+Amber's Stay;N/A;N/A 19/04/2023 - 25/04/2023;Harry;Harry, Tanya, Amber
+
+
+Joshua's Birthday Party;N/A;N/A 22/04/2023;Joshua;Joshua, Scott, Lara, Madison
+Dinner;N/A;20:00 18/04/2023;Joanna;Joanna, Christina, Mom, Aunt Zoey
+
+Sister's birthday celebration;N/A;N/A 22/04/2023;Danielle;Danielle, Henry, Sister (Maria)
+
+
+
+Dinner;N/A;N/A 23/04/2023;Joe;Joe, Carol, Henry, Kelly, Christina, Walter
+Hang out;Anthony's house, Postinos, the beach;10:00, N/A, N/A, N/A 24/04/2023, N/A, N/A, N/A;Jason;Jason, Gary, William, Chris
+Beach Trip;Aki Beach;10:00 11/06/2023;Henry;Henry, Paul, Jack, Dennis
+
+Baseball game;N/A;N/A 23/04/2023;Jack;Jack, Ronald, Patrick, Steve
+Six Flags;N/A;N/A 23/04/2023;Amanda;Amanda, Melissa, Frank, Catherine, Edward
+
+Dinner;N/A;18:00 18/04/2023;Roger;Roger, Malcolm,, the Watsons.
+Weekend Trip;N/A;N/A 22/04/2023 - 23/04/2023;Larry;Larry, Amy, Angela, Alex, Jack
+
+
+
+
+Fourth of July Celebration;Howard and Valerie's place;N/A 04/07/2023;Stacy;Stacy, Mark, Howard, Valerie
+
+Camping trip;Emma Wood State Beach;N/A June (exact date not specified);Henry;Henry, Paul, Jack, Dennis, Alex, Cujo (Paul's dog)
+Movie - Enchanted;Cinemax 26 on Carson Boulevard;2:00PM 23/04/2023;Jack;Jack, Danielle,, Karen
+Meeting with John and Kim;N/A;N/A 19/04/2023;Stephanie;Stephanie, John, Kim
+
+Gift giving;N/A;N/A 25/04/2023;Stephanie;Stephanie, John, Kim
+Hiking;Granite Trail;N/A 21/04/2023;Richard;Richard, Jose, Brian
+Trying out new brewery downtown;Downtown;N/A 23/04/2023;Martha;Martha, Bill, Evan, Tom, Janet
+Bruce's Birthday;N/A;N/A 18/04/2023;Bruce;Bruce, Judy, Aunt Maya
+
+
+
+Dinner;N/A;5:00 PM 22/04/2023;Barry;Barry, Martha
+
+
+Meet up with Shirley, Lunch with Ben, Lunch with Anna, Dinner with Eric and Lauren;N/A;Shirley tonight, Lunch with Ben tomorrow, Lunch with Anna the next day Shirley - 18/04/2023, Lunch with Ben - 19/04/2023, Lunch with Anna - 20/04/2023, Dinner - N/A;Shirley;Shirley, Ben, Anna, Eric, Lauren
+
+
+Beach Trip;Atlantic Beach;09:00 23/04/2023;Paul;Paul, Henry, Alex, Dennis, Jack
+Baseball game;N/A;N/A 23/04/2023;Jack;Jack, Ronald, Patrick, Steve
+
+
+Checking out the brewery;N/A;N/A 23/04/2023;Pamela;Pamela, Jack, Wilson, Leslie, Tom
+
+
+
+Department Group Lunch;N/A;N/A 18/04/2023;Cathy;Cathy, Peggy, Caroline
+
+
+Camping trip;Emma Wood State Beach;N/A June (exact date not specified);Henry;Henry, Paul, Jack, Dennis, Alex
+
+
+
+Picnic;N/A;N/A 25/04/2023;Stephanie;Stephanie, William, Kevin, The Winstons
+
+Baseball game;N/A;N/A 23/04/2023;Jack;Jack, Ronald, Patrick, Steve
+
+Dinner;N/A;N/A 25/04/2023;Janice;Janice, Darren, Melinda
+
+Game;N/A;N/A 18/04/2023;Anthony;Anthony, Chris, Jason, Gary, William, Alice
+
+
+
+
+
+Movie night;N/A;20:00 18/04/2023;Chris;Chris, Mark, Tom,, others (not specified)
+Cheer up Jesse;Bar;N/A 18/04/2023;Derrick;Derrick, Ben, Jesse
+The Housemakers show;N/A;4:00 PM 25/04/2023;Ruth;Ruth, Evelyn
+
+
+
+Dinner and Bar;N/A;Dinner - 18:00, Bar - N/A Friday, 21/04/2023;Brandon;Brandon, Lara, George, Patricia
+Party;N/A;N/A 23/04/2023;Emma;Emma, Brenda, Jon, George, Peter, Christopher, Catherine
+
+Six Flags;N/A;N/A 23/04/2023 - 24/04/2023;Melissa;Melissa, Amanda, Frank, Catherine, Edward
+
+Lunch;Josepies, Main Street;13:00 26/04/2023;Kevin;Kevin, Harold, Rachel
+Brunch;N/A;N/A 24/04/2023;James;James, Tanya, Henry, Evelyn
+Pick up Patrick and Sherrie, Lunch;Union Station, Chinese restaurant;3:00 PM 20/04/2023;Diane;Diane, Patrick, Sherrie
+Art exhibit;N/A;N/A 23/04/2023;Christopher;Christopher, Carol, Tara
+Watching the game;N/A;N/A 23/04/2023;Eric;Eric, Matt, Walter, Kenneth
+Astros vs. Angels game;N/A;8:00 PM 20/04/2023;Doug;Doug, Aaron
+
+
+Movie;N/A;N/A 24/04/2023;Dwight;Dwight, Jordan, Philip, Andrew

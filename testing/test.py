@@ -54,8 +54,7 @@ def turbo(prompt):
 
 def eventHandler(bot_response):
     response = bot_response.strip().splitlines()
-    found = []
-    print("kekw", response)
+    print("got", response)
     event = response[0].strip()
     if event.startswith("Event"):
         event = event.split(":")[1].strip()
@@ -130,10 +129,11 @@ for text in open("dataset2.tsv").read().strip().splitlines():
         try:
             result = eventHandler(bot_response)
             print(result)
-            if len(result) == 1:
+            if len(result) == 1 and set([*result[0][2]]) != set([*"N/A "]):
                 print("saving as:", ";".join(result[0]))
                 out = ";".join(result[0]) + "\n"
             else:
+                print("date too ambiguous")
                 out = "\n"
         except:
             print(traceback.format_exc())
