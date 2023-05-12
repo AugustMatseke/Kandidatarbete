@@ -38,7 +38,7 @@ def turbo(prompt):
         messages=[
             {
                 "role": "system",
-                "content": "You are a secretary that finds events in a conversation. Since you live in Sweden, the date format is DD/MM/YYYY and the time format is HH:MM.",
+                "content": "You are a secretary that finds events in a conversation and adds them to a calendar. You must follow the following format: Event, Location, Time, Date, Participants. You must also not write anything other than the results found, and that you follow the date format DD/MM/YYYY and the time format HH:MM.",
             },
             {"role": "user", "content": prompt},
         ],
@@ -91,14 +91,21 @@ def eventHandler(bot_response):
     return [[event, location, time, participants[0], ", ".join(participants)]]
 
 
-
+asdf = 1
+open("log.txt", "w").write("")
 for text in open("dataset2.tsv").read().strip().splitlines():
+    print(asdf)
+    asdf += 1
+    
     conversation, *stuff = text.split("\t")
-    prompt = f"Observe the following conversation. If one single event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
+    prompt = f"Check if the following conversation is about an event, meeting or gathering. Specifically, check if it contains an event that can be written in a calendar. If it does, answer yes, otherwise answer no. The conversation is as follows:\n"
     bot_response = None
+    event = False
     while True:
         try:
-            bot_response = davinci(prompt + "\n".join(conversation.split(";")))
+            bot_response = turbo(prompt + "\n".join(conversation.split(";")))
+            if "yes" in bot_response.lower():
+                event = True
             break
         except:
             print(traceback.format_exc(), file=stderr)
@@ -106,17 +113,33 @@ for text in open("dataset2.tsv").read().strip().splitlines():
             print("retrying...", file=stderr)
             sleep(1)
 
-    out = ""     
-    try:
-        result = eventHandler(bot_response)
-        print(len(result), result)
-        if len(result) == 1:
-            print("saving as:", ";".join(result[0]))
-            out = ";".join(result[0]) + "\n"
-        else:
+    if event:
+        prompt = f"The following conversation is about an event. Find the event, location, time, date, and participants. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {today}. Return N/A for any values that aren't found. Do not write anything other than the results found. The conversation is as follows:\n"
+        bot_response = None
+        while True:
+            try:
+                bot_response = turbo(prompt + "\n".join(conversation.split(";")))
+                break
+            except:
+                print(traceback.format_exc(), file=stderr)
+                print(conversation, file=stderr)
+                print("retrying...", file=stderr)
+                sleep(1)
+
+        out = ""     
+        try:
+            result = eventHandler(bot_response)
+            print(result)
+            if len(result) == 1:
+                print("saving as:", ";".join(result[0]))
+                out = ";".join(result[0]) + "\n"
+            else:
+                out = "\n"
+        except:
+            print(traceback.format_exc())
+            # print(conversation)
             out = "\n"
-    except:
-        print(traceback.format_exc())
-        # print(conversation)
+    else:
+        print("no event found")
         out = "\n"
     open("log.txt", "a").write(out)
