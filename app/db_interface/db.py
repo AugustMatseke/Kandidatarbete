@@ -20,7 +20,6 @@ def init_database():
 
 def addevent(name, time, location, owner, participants):
     owner = str(owner)
-    participants = ", ".join(participants)
     cur.execute("SELECT * FROM events WHERE name = ?", (name,))
     result = cur.fetchone()
     if result:
@@ -43,52 +42,22 @@ def removeevent(name, user):
     return True
 
 
-def modifyevent(name, time, location, user):
-    cur.execute("SELECT * FROM events WHERE name = ?", (name,))
-    owner = cur.fetchone()[3]
-    if str(user) != owner:
-        return False
+def modifyevent(name, time, location, participants, owner):
     cur.execute(
-        "UPDATE events SET time = ?, location = ? WHERE name = ?",
-        (time, location, name),
-    )
-    con.commit()
-    return True
-
-
-def joinevent(name, user, event):
-    cur.execute("SELECT * FROM events WHERE name = ?", (name,))
-    participants = cur.fetchone()[4] # TODO: change array to dict stuff
-    if user in participants.split(", "):
-        return False
-    participants = participants + ", " + user
-    cur.execute(
-        "UPDATE events SET participants = ? WHERE name = ?", (participants, name)
-    )
-    con.commit()
-    return True
-
-
-def leaveevent(name, user):
-    cur.execute("SELECT * FROM events WHERE name = ?", (name,))
-    participants = cur.fetchone()[4]
-    if user not in participants.split(", "):
-        return False
-    participants = participants.replace(", " + user, "")
-    cur.execute(
-        "UPDATE events SET participants = ? WHERE name = ?", (participants, name)
+        "UPDATE events SET time = ?, location = ?, participants = ? WHERE name = ? AND owner = ?",
+        (time, location, participants, name, owner),
     )
     con.commit()
     return True
 
 
 def getevents():
-    cur.execute("SELECT name FROM events")
+    cur.execute("SELECT * FROM events")
     return cur.fetchall()
 
 
-def getevent(name):
-    cur.execute("SELECT * FROM events WHERE name = ?", (name,))
+def getevent(name, owner):
+    cur.execute("SELECT * FROM events WHERE name = ? AND owner = ?", (name, owner))
     return cur.fetchone()
 
 

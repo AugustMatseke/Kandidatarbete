@@ -112,7 +112,6 @@ def add_event(user_id, name, start, end=None, location=""):
     }
 
     event = service.events().insert(calendarId="primary", body=event).execute()
-    print(event)
     return event
 
 
@@ -145,11 +144,11 @@ def modify_event(
         "summary": name,
         "location": location,
         "start": {
-            "dateTime": start.isoformat(),
+            "dateTime": parse(start).isoformat(),
             "timeZone": "Europe/Stockholm",
         },
         "end": {
-            "dateTime": end.isoformat() if end else start.isoformat(),
+            "dateTime": parse(end).isoformat() if end else parse(start).isoformat(),
             "timeZone": "Europe/Stockholm",
         },
     }

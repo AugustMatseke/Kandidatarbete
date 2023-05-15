@@ -12,11 +12,14 @@ import app.db_interface.db as db
 from app.chatgpt_ai.openai import *
 from app.gcal.gcal_api import do_auth
 
-import requests
+from time import sleep
+import traceback
+
+today = datetime.datetime.now().strftime('%H:%M %d/%m/%Y')
 
 load_dotenv()
 
-discord_token = os.getenv("DISCORD_TOKEN")
+discord_token = os.getenv("DISCORD_TOKEND")
 
 CONVERSATION_LENGTH_LIMIT = 15
 
@@ -32,8 +35,8 @@ class MyClient(discord.Client):
         print("Initializing database...")
         db.init_database()
         print("Loading events...")
-        # commands.events = set(event[0] for event in db.getevents())
-        print(commands.events)
+        commands.init_events()
+        print(*commands.events, sep="\n")
         await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="for events."))
         print(f"We have logged in as {client.user}")
         print("Ready.")
@@ -63,13 +66,42 @@ async def fetchMessages(message: discord.Message):
         MyClient.conversation.get()
     text = "\n".join(MyClient.conversation.queue)
     # prompt = f"Find all the events, meetings or other gatherings in the following conversation. Find their names, locations, times, dates and participants. For each detected event, meeting or gathering, return a list with the name, location, time and date, and participants in that specific order. Do not label the values, just list them with semicolons in between. Return N/A for values that cannot be identified. If the event name is N/A or no participants are found, skip the entire event. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
-    prompt = f"Observe the following conversation. If an event is present, find the event, location, time, date, and participants. Return N/A for any that aren't found. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {datetime.datetime.now().strftime('%H:%M, %d %b %Y')}:\n"
-    print(prompt + text, file=stderr)
-    bot_response = turbo(prompt=prompt + text) # TODO: Change to davinci
-    # bot_response = davinci(prompt=prompt + text)
-    result = await eventHandler(bot_response)
-    if result and len(result):
-        await message.channel.send(result)
+    prompt = f"Check if the following conversation is about an event, meeting or gathering. Specifically, check if it contains an event that can be written in a calendar. If it does, answer yes, otherwise answer no. The conversation is as follows:\n"
+    bot_response = None
+    event = False
+    while True:
+        try:
+            bot_response = chatgpt_response(prompt + text)
+            # print(bot_response)
+            if "yes" in bot_response.lower():
+                event = True
+            break
+        except:
+            print(traceback.format_exc(), file=stderr)
+            print(text, file=stderr)
+            print("retrying...", file=stderr)
+            sleep(1)
+
+    if event:
+        prompt = f"The following conversation is about an event. Find the event, location, time, date, and participants. Attempt to return the absolute dates and times instead of the relative time, the current time and date is {today}. Return N/A for any values that aren't found. Do not write anything other than the results found. The conversation is as follows:\n"
+        bot_response = None
+        while True:
+            try:
+                bot_response = chatgpt_response(prompt + text)
+                break
+            except:
+                print(traceback.format_exc(), file=stderr)
+                print(text, file=stderr)
+                print("retrying...", file=stderr)
+                sleep(1)
+
+        try:
+            result = eventHandler(bot_response)
+            # print(result)
+            if set([*result[2]]) != set([*"N/A "]):
+                await commands.addevent(*result)
+        except:
+            print(traceback.format_exc())
 
 
 intents = discord.Intents.default()
@@ -82,10 +114,8 @@ async def get_name(discord_id):
     return (await client.fetch_user(int(discord_id))).name
 
 
-async def eventHandler(bot_response):
+def eventHandler(bot_response):
     response = bot_response.strip().splitlines()
-    found = []
-    print(response)
     event = response[0].strip()
     if event.startswith("Event"):
         event = event.split(":")[1].strip()
@@ -99,32 +129,26 @@ async def eventHandler(bot_response):
     time = response[2].strip()
     if time.startswith("Time"):
         time = time.split(":", maxsplit=1)[1].strip()
-    if time == "N/A":
-        return []
+    # if time == "N/A":
+    #     return []
 
     date = response[3].strip()
     if date.startswith("Date"):
         date = date.split(":")[1].strip()
-    if date == "N/A":
-        return []
+    # if date == "N/A":
+    #     return []
 
     time += " " + date
 
     participants = response[4].strip()
     if participants.startswith("Participants"):
         participants = participants.split(":")[1].strip()
+    if " and " in participants:
+        participants = participants.replace(" and ", ", ")
     if ", " in participants:
         participants = participants.split(", ")
 
-    user_id = MyClient.participants[0]
-
-    if event not in commands.events:
-        print("detected event", [event, user_id, time, location, participants])
-        found.append([event, user_id, time, location, participants])
-        if "N/A" in [event, user_id, time, location, participants]:
-            return []
-
-        await commands.addevent(user_id, event, time, location, participants)
+    return [event, location, time, participants[0], participants]
 
 
 
@@ -151,7 +175,7 @@ async def addevent(
     guild=discord.Object(id=1064844577820921886),
 )
 async def removeevent(interaction: discord.Interaction, name: str):
-    if commands.removeevent(interaction.user.id, name):
+    if commands.removeevent(str(interaction.user.id), name):
         await interaction.response.send_message("Event removed.")
     else:
         await interaction.response.send_message(
@@ -167,7 +191,7 @@ async def removeevent(interaction: discord.Interaction, name: str):
 async def modifyevent(
     interaction: discord.Interaction, name: str, time: str, location: str
 ):
-    if commands.modifyevent(interaction.user.id, name, time, location):
+    if commands.modifyevent(str(interaction.user.id), name, time, location):
         await interaction.response.send_message("Event modified.")
     else:
         await interaction.response.send_message(
@@ -180,8 +204,8 @@ async def modifyevent(
     description="Join an event",
     guild=discord.Object(id=1064844577820921886),
 )
-async def joinevent(interaction: discord.Interaction, name: str):
-    if commands.joinevent(interaction.user.id, name):
+async def joinevent(interaction: discord.Interaction, name: str, owner: str):
+    if commands.joinevent(str(interaction.user.id), name, owner):
         await interaction.response.send_message("Joined event.")
     else:
         await interaction.response.send_message(
@@ -194,8 +218,8 @@ async def joinevent(interaction: discord.Interaction, name: str):
     description="Leave an event",
     guild=discord.Object(id=1064844577820921886),
 )
-async def leaveevent(interaction: discord.Interaction, name: str):
-    if commands.leaveevent(interaction.user.id, name):
+async def leaveevent(interaction: discord.Interaction, name: str, owner: str):
+    if commands.leaveevent(str(interaction.user.id), name, owner):
         await interaction.response.send_message("Left event.")
     else:
         await interaction.response.send_message(

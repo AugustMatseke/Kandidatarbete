@@ -32,26 +32,6 @@ def davinci(prompt):
     return prompt_response
 
 
-def turbo(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0301",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a secretary that finds events in a conversation and adds them to a calendar. You must follow the following format: Event, Location, Time, Date, Participants. You must also not write anything other than the results found, and that you follow the date format DD/MM/YYYY and the time format HH:MM.",
-            },
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0,  # 0-2 lower= more deterministic, higher = more random
-        max_tokens=100,
-    )
-    response_dict = response.get("choices")
-    if response_dict and len(response_dict) > 0:
-        prompt_response = response_dict[0]["message"]["content"]
-
-    return prompt_response
-
-
 def eventHandler(bot_response):
     response = bot_response.strip().splitlines()
     print("got", response)
@@ -102,7 +82,7 @@ for text in open("dataset2.tsv").read().strip().splitlines():
     event = False
     while True:
         try:
-            bot_response = turbo(prompt + "\n".join(conversation.split(";")))
+            bot_response = davinci(prompt + "\n".join(conversation.split(";")))
             if "yes" in bot_response.lower():
                 event = True
             break
@@ -117,7 +97,7 @@ for text in open("dataset2.tsv").read().strip().splitlines():
         bot_response = None
         while True:
             try:
-                bot_response = turbo(prompt + "\n".join(conversation.split(";")))
+                bot_response = davinci(prompt + "\n".join(conversation.split(";")))
                 break
             except:
                 print(traceback.format_exc(), file=stderr)
